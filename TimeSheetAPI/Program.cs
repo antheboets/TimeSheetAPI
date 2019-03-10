@@ -14,11 +14,20 @@ namespace TimeSheetAPI
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            //CreateWebHostBuilder(args).Build().Run();
+            BuildWebHost(args).Run();
         }
-
+        public static IWebHost BuildWebHost(string[] args) =>
+        WebHost.CreateDefaultBuilder(args)
+            //.UseApplicationInsights()
+            .UseSetting("detailedErrors", "true")
+            .UseStartup<Startup>()
+            .CaptureStartupErrors(true)
+            .Build();
+        /*
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
+        */
     }
 }
