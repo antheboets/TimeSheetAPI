@@ -11,7 +11,7 @@ namespace TimeSheetAPI.Migrations
 {
     [DbContext(typeof(TimeSheetContext))]
     [Migration("20190310202144_testmigration")]
-    partial class testmigration
+    partial class Testmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

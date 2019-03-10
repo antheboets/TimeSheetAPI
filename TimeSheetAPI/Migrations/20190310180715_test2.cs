@@ -2,7 +2,7 @@
 
 namespace TimeSheetAPI.Migrations
 {
-    public partial class test2 : Migration
+    public partial class Test2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

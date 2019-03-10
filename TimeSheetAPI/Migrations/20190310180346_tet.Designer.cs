@@ -11,7 +11,7 @@ namespace TimeSheetAPI.Migrations
 {
     [DbContext(typeof(TimeSheetContext))]
     [Migration("20190310180346_tet")]
-    partial class tet
+    partial class Tet
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
