@@ -38,8 +38,9 @@ namespace TimeSheetAPI.Controllers
         [HttpPost("Get")]
         public Dto.User GetById([FromBody] Dto.User input)
         {
-            
-            Models.User User = timeSheetContext.User.Single(x => x.Id == input.Id);
+
+            Models.User User = timeSheetContext.User.First();
+            //Models.User User = timeSheetContext.User.Where(x => x.Id == input.Id);
             /*
             ICollection<Dto.Log> Logs = new List<Dto.Log>();
             foreach (var log in User.Logs)
