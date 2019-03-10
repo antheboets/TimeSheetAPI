@@ -3,13 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TimeSheetAPI.Dto;
+using TimeSheetAPI.Infrastructure;
 
 namespace TimeSheetAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/login/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class UserController : ControllerBase
     {
+        TimeSheetContext timeSheetContext;
+        public void TimeSheetContext(TimeSheetContext timeSheetContext)
+        {
+            this.timeSheetContext = timeSheetContext;
+        }
+        [HttpGet]
+        public Dto.User Login()
+        {
+            return new Dto.User { Name = "test" };
+        }
+
+        [HttpGet("{id}")]
+        public ICollection<Dto.Log> GetLogs(int Id)
+        {
+            //ICollection<Dto.Log> Logs = new ICollection<Dto.Log>;
+            return null;
+        }
+        /*
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
@@ -41,5 +61,6 @@ namespace TimeSheetAPI.Controllers
         public void Delete(int id)
         {
         }
+        */
     }
 }
