@@ -36,7 +36,7 @@ namespace TimeSheetAPI
 
             services.AddMvc();
             //string connectionString = Configuration.GetConnectionString("TimeSheetDatabase");
-            string connectionString = "Server = tcp:ehbpmagroup6.database.windows.net,1433; Initial Catalog = EhbPmaGroup6; Persist Security Info = False; User ID = anthe; Password = SV; q ^)nbLf]Z; e9Z; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;";
+            string connectionString = "Server = tcp:ehbpmagroup6.database.windows.net,1433; Initial Catalog = EhbPmaGroup6; Persist Security Info = False; User ID = anthe; Password = YLHNRZ[6cMt[8*NV; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;";
             services.AddDbContext<TimeSheetContext>(options => options.UseSqlServer(connectionString));
         }
 
