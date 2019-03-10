@@ -22,20 +22,23 @@ namespace TimeSheetAPI.Controllers
         [HttpPost("Login")]
         public Dto.User Login([FromBody] Dto.User input)
         {
-
+            /*
             Models.User User = timeSheetContext.User.Single(x => x.Email == input.Email && x.Password == input.Password);
             ICollection<Dto.Log> Logs = new List<Dto.Log>();
             foreach (var log in User.Logs)
             {
                 Logs.Add(new Dto.Log { Id = log.Id, Start = log.Start, Stop = log.Stop, Description = log.Description });
             }
-
+            
             return new Dto.User { Id = User.Id, Name = User.Name, Email = User.Email, Password = User.Password, Logs = Logs };
+            */
+            return input;
         }
 
         [HttpPost("Get")]
-        public Dto.User GetById([FromBody] int Id)
+        public int GetById([FromBody] int Id)
         {
+            /*
             Models.User User = timeSheetContext.User.Single(x => x.Id == Id);
             ICollection<Dto.Log> Logs = new List<Dto.Log>();
             foreach (var log in User.Logs)
@@ -44,7 +47,8 @@ namespace TimeSheetAPI.Controllers
             }
             
             return new Dto.User { Id=User.Id, Name=User.Name, Email=User.Email, Password=User.Password, Logs=Logs };
-
+            */
+            return Id;
         }
         /*
         [HttpGet]
