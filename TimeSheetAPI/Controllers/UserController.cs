@@ -20,10 +20,10 @@ namespace TimeSheetAPI.Controllers
             this.timeSheetContext = timeSheetContext;
         }
         [HttpPost]
-        public Dto.User Login([FromBody] String email, [FromBody] String password)
+        public Dto.User Login([FromBody] Dto.User input)
         {
             
-            return new Dto.User { Name = "test", Email=email, Password=password };
+            return new Dto.User { Name = "test", Email= input.Email, Password= input.Password };
         }
 
         [HttpGet("{id}")]
