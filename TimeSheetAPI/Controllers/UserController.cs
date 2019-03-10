@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TimeSheetAPI.Controllers
 {
-    
+
     [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -19,7 +19,7 @@ namespace TimeSheetAPI.Controllers
         {
             this.timeSheetContext = timeSheetContext;
         }
-        [HttpPost]
+        [HttpPost("login")]
         public Dto.User Login([FromBody] Dto.User input)
         {
 
@@ -33,7 +33,7 @@ namespace TimeSheetAPI.Controllers
             return new Dto.User { Id = User.Id, Name = User.Name, Email = User.Email, Password = User.Password, Logs = Logs };
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{Id}")]
         public Dto.User GetById(int Id)
         {
             Models.User User = timeSheetContext.User.Single(x => x.Id == Id);
@@ -46,12 +46,14 @@ namespace TimeSheetAPI.Controllers
             return new Dto.User { Id=User.Id, Name=User.Name, Email=User.Email, Password=User.Password, Logs=Logs };
 
         }
+        /*
         [HttpGet]
         public Dto.User Test()
         {
 
             return new Dto.User { Name = "test"};
         }
+        */
         /*
         // GET api/values
         [HttpGet]
