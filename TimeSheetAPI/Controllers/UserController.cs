@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TimeSheetAPI.Dto;
 using TimeSheetAPI.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace TimeSheetAPI.Controllers
 {
-    [Route("api/login/[controller]")]
+    
+    [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -17,10 +19,10 @@ namespace TimeSheetAPI.Controllers
         {
             this.timeSheetContext = timeSheetContext;
         }
-        [HttpGet]
-        public Dto.User Login()
+        [HttpPost]
+        public Dto.User Login(String email, String password)
         {
-            return new Dto.User { Name = "test" };
+            return new Dto.User { Name = "test", Email=email, Password=password };
         }
 
         [HttpGet("{id}")]
@@ -29,6 +31,11 @@ namespace TimeSheetAPI.Controllers
             //ICollection<Dto.Log> Logs = new ICollection<Dto.Log>;
             return null;
 
+        }
+        [HttpGet]
+        public Dto.User Loginss()
+        {
+            return new Dto.User { Name = "test"};
         }
         /*
         // GET api/values
