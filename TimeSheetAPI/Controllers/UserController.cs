@@ -19,7 +19,7 @@ namespace TimeSheetAPI.Controllers
         {
             this.timeSheetContext = timeSheetContext;
         }
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public Dto.User Login([FromBody] Dto.User input)
         {
 
@@ -33,8 +33,8 @@ namespace TimeSheetAPI.Controllers
             return new Dto.User { Id = User.Id, Name = User.Name, Email = User.Email, Password = User.Password, Logs = Logs };
         }
 
-        [HttpGet("{Id}")]
-        public Dto.User GetById(int Id)
+        [HttpPost("Get")]
+        public Dto.User GetById([FromBody] int Id)
         {
             Models.User User = timeSheetContext.User.Single(x => x.Id == Id);
             ICollection<Dto.Log> Logs = new List<Dto.Log>();
