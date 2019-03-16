@@ -27,17 +27,17 @@ namespace TimeSheetAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            /*
+            
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
                 builder.AllowAnyOrigin()
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
-            */
+            
             services.AddMvc();
-            //string connectionString = Configuration.GetConnectionString("TimeSheetDatabase");
-            string connectionString = "Server = tcp:ehbpmagroup6.database.windows.net,1433; Initial Catalog = EhbPmaGroup6; Persist Security Info = False; User ID = anthe; Password = [7(8*Zwt#Dh$)QF@; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;";
+            string connectionString = Configuration.GetConnectionString("TimeSheetDatabase");
+            //string connectionString = "Server = tcp:ehbpmagroup6.database.windows.net,1433; Initial Catalog = EhbPmaGroup6; Persist Security Info = False; User ID = anthe; Password = [7(8*Zwt#Dh$)QF@; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;";
             services.AddDbContext<TimeSheetContext>(options => options.UseSqlServer(connectionString));
         }
 
@@ -45,7 +45,7 @@ namespace TimeSheetAPI
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,TimeSheetContext timeSheetContext)
         {
 
-            //app.UseCors("MyPolicy");
+            app.UseCors("MyPolicy");
             timeSheetContext.Database.Migrate();
             if (env.IsDevelopment())
             {
