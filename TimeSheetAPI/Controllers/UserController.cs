@@ -14,15 +14,15 @@ namespace TimeSheetAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        TimeSheetContext timeSheetContext;
-        public void TimeSheetContext(TimeSheetContext timeSheetContext)
+        TimeSheetContext TimeSheetContext;
+        public UserController(TimeSheetContext TimeSheetContext)
         {
-            this.timeSheetContext = timeSheetContext;
+            this.TimeSheetContext = TimeSheetContext;
         }
         [HttpPost("Login")]
         public Dto.User Login([FromBody] Dto.User input)
         {
-            Models.User User = timeSheetContext.User.Single(x => x.Email == input.Email && x.Password == input.Password);
+            Models.User User = TimeSheetContext.User.Single(x => x.Email == input.Email && x.Password == input.Password);
             ICollection<Dto.Log> Logs = new List<Dto.Log>();
             foreach (var log in User.Logs)
             {
@@ -36,7 +36,7 @@ namespace TimeSheetAPI.Controllers
         public Dto.User GetById([FromBody] int input)
         {
             
-            Models.User User = timeSheetContext.User.Single(x => x.Id == input);
+            Models.User User = TimeSheetContext.User.Single(x => x.Id == input);
             
             ICollection<Dto.Log> Logs = new List<Dto.Log>();
             foreach (var log in User.Logs)
@@ -49,9 +49,7 @@ namespace TimeSheetAPI.Controllers
         [HttpGet("test")]
         public Dto.User Test()
         {
-
-            Models.User User = timeSheetContext.User.First();
-            
+            Models.User User = TimeSheetContext.User.First();
 
             return new Dto.User { Id = User.Id, Name = User.Name, Email = User.Email, Password = User.Password}; 
 

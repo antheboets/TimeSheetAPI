@@ -13,10 +13,10 @@ namespace TimeSheetAPI.Controllers
     [ApiController]
     public class LogController : ControllerBase
     {
-        TimeSheetContext timeSheetContext;
-        public void TimeSheetContext(TimeSheetContext timeSheetContext)
+        TimeSheetContext TimeSheetContext;
+        public LogController(TimeSheetContext TimeSheetContext)
         {
-            this.timeSheetContext = timeSheetContext;
+            this.TimeSheetContext = TimeSheetContext;
         }
     }
 }
