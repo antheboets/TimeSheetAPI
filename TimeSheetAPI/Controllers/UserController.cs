@@ -33,10 +33,10 @@ namespace TimeSheetAPI.Controllers
         }
 
         [HttpPost("Get")]
-        public Dto.User GetById([FromBody] Dto.User input)
+        public Dto.User GetById([FromBody] int input)
         {
-            /*
-            Models.User User = timeSheetContext.User.Include(x => x.Id == input.Id);
+            
+            Models.User User = timeSheetContext.User.Single(x => x.Id == input);
             
             ICollection<Dto.Log> Logs = new List<Dto.Log>();
             foreach (var log in User.Logs)
@@ -45,7 +45,7 @@ namespace TimeSheetAPI.Controllers
             }
             
             return new Dto.User { Id=User.Id, Name=User.Name, Email=User.Email, Password=User.Password, Logs=Logs };
-            */
+            
             return null;
        
         }
