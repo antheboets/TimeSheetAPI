@@ -45,9 +45,16 @@ namespace TimeSheetAPI.Controllers
             }
             
             return new Dto.User { Id=User.Id, Name=User.Name, Email=User.Email, Password=User.Password, Logs=Logs };
+        }
+        [HttpGet("test")]
+        public Dto.User Test()
+        {
+
+            Models.User User = timeSheetContext.User.First();
             
-            return null;
-       
+
+            return new Dto.User { Id = User.Id, Name = User.Name, Email = User.Email, Password = User.Password}; 
+
         }
         /*
         [HttpGet]
