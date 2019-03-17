@@ -20,25 +20,24 @@ namespace TimeSheetAPI.Controllers
             this.TimeSheetContext = TimeSheetContext;
         }
         [HttpPost("Login")]
-        public Dto.User Login([FromBody] Dto.User input)
+        public async Task<Dto.User> Login([FromBody] Dto.User input)
         {
             
-            Models.User User = TimeSheetContext.User.Include(x => x.Logs).Single(x => x.Email == input.Email && x.Password == input.Password);
+            Models.User User = await TimeSheetContext.User.Include(x => x.Logs).SingleAsync(x => x.Email == input.Email && x.Password == input.Password);
             ICollection<Dto.Log> Logs = new List<Dto.Log>();
             foreach (var log in User.Logs)
             {
                 Logs.Add(new Dto.Log { Id = log.Id, Start = log.Start, Stop = log.Stop, Description = log.Description });
             }
-            
+
             return new Dto.User { Id = User.Id, Name = User.Name, Email = User.Email, Password = User.Password, Logs = Logs };
-            //return new Dto.User { Id = input.Id, Name = input.Name, Email = input.Email, Password = input.Password, Logs = null };
         }
 
         [HttpPost("Get")]
-        public Dto.User GetById([FromBody] Dto.User input)
+        public async Task<Dto.User> GetById([FromBody] Dto.User input)
         {
             
-            Models.User User = TimeSheetContext.User.Include(x => x.Logs).Single(x => x.Id == input.Id);
+            Models.User User =  await TimeSheetContext.User.Include(x => x.Logs).SingleAsync(x => x.Id == input.Id);
             
             ICollection<Dto.Log> Logs = new List<Dto.Log>();
             foreach (var log in User.Logs)
@@ -49,53 +48,12 @@ namespace TimeSheetAPI.Controllers
             return new Dto.User { Id=User.Id, Name=User.Name, Email=User.Email, Password=User.Password, Logs=Logs };
         }
         [HttpGet("test")]
-        public Dto.User Test()
+        public async Task<Dto.User> Test()
         {
-            Models.User User = TimeSheetContext.User.First();
+            Models.User User = await TimeSheetContext.User.FirstAsync();
 
             return new Dto.User { Id = User.Id, Name = User.Name, Email = User.Email, Password = User.Password}; 
 
         }
-        /*
-        [HttpGet]
-        public Dto.User Test()
-        {
-
-            return new Dto.User { Name = "test"};
-        }
-        */
-        /*
-        // GET api/values
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-        */
     }
 }

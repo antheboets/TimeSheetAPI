@@ -18,5 +18,10 @@ namespace TimeSheetAPI.Controllers
         {
             this.TimeSheetContext = TimeSheetContext;
         }
+        [HttpPost("Create")]
+        public void Create(Dto.Log log)
+        {
+
+        }
     }
 }
