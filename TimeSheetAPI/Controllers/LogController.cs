@@ -23,5 +23,18 @@ namespace TimeSheetAPI.Controllers
         {
 
         }
+        [HttpGet("Get")]
+        public async Task<Dto.Log> Get()
+        {
+              
+            return null;
+        }
+        [HttpGet("GetTest")]
+        public async Task<Dto.Log> GetTest(int id)
+        {
+            Models.Log log = await TimeSheetContext.Log.SingleAsync(x => x.Id == id);
+            
+            return new Dto.Log{ Id=log.Id, Start=log.Start, Description=log.Description,Stop=log.Stop};
+        }
     }
 }
