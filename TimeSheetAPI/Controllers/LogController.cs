@@ -19,22 +19,28 @@ namespace TimeSheetAPI.Controllers
             this.TimeSheetContext = TimeSheetContext;
         }
         [HttpPost("Create")]
-        public void Create(Dto.Log log)
+        public async void Create(Dto.Log log)
         {
-
+            Models.Log ModelLog = new Models.Log {Id=log.Id, Start=log.Start, Stop=log.Stop, Description=log.Description };
+            await TimeSheetContext.Log.AddAsync(ModelLog);
         }
         [HttpGet("Get")]
         public async Task<Dto.Log> Get()
-        {
-              
+        {     
             return null;
         }
-        [HttpGet("GetTest")]
-        public async Task<Dto.Log> GetTest(int id)
+        [HttpPost("Get")]
+        public async Task<Dto.Log> Get([FromBody] long currentTimeTicks)
         {
-            Models.Log log = await TimeSheetContext.Log.SingleAsync(x => x.Id == id);
-            
-            return new Dto.Log{ Id=log.Id, Start=log.Start, Description=log.Description,Stop=log.Stop};
+            //https://stackoverflow.com/questions/2821035/c-sharp-get-start-date-and-last-date-based-on-current-date
+            DateTime currentTime = new DateTime(currentTimeTicks);
+            currentTime = currentTime.Date;
+            DateTime ns = new DateTime();
+            var thisWeekStart = currentTime.AddDays(-(int)currentTime.DayOfWeek);
+            var thisWeekEnd = thisWeekStart.AddDays(7).AddSeconds(-1);
+
+
+            return null;
         }
     }
 }
