@@ -5,12 +5,10 @@ using System.Threading.Tasks;
 
 namespace TimeSheetAPI.Models
 {
-    public class User
+    public class Activity
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public ICollection<Log> Logs { get; set; }
+        public string ProjectNr { get; set; }
     }
 }

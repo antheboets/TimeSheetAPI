@@ -10,6 +10,8 @@ namespace TimeSheetAPI.Models
         public int Id { get; set; }
         public DateTime Start { get; set; }
         public DateTime Stop { get; set; }
-        public String Description { get; set; }
+        public string Description { get; set; }
+        public Project ProjectId { get; set; }
+        public int ActivityNr { get; set;}
     }
 }
