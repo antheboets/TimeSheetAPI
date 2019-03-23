@@ -13,6 +13,13 @@ namespace TimeSheetAPI.Infrastructure
         public TimeSheetContext(DbContextOptions<TimeSheetContext> options) : base(options) { }
         public DbSet<User> User { get; set; }
         public DbSet<Log> Log { get; set; }
-
+        public DbSet<Project> Project { get; set; }
+        public DbSet<Activity> Activity { get; set; }
+        /*
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Log>().HasKey(o => new { o.Project, 0})
+        }
+        */
     }
 }

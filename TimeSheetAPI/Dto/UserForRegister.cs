@@ -5,14 +5,9 @@ using System.Threading.Tasks;
 
 namespace TimeSheetAPI.Dto
 {
-    public class User
+    public class UserForRegister
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public Models.User.Roles Role { get; set; }
-        public ICollection<Log> Logs { get; set; }
-
     }
 }
