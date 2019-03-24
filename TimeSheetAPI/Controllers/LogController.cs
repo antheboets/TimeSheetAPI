@@ -22,9 +22,9 @@ namespace TimeSheetAPI.Controllers
             this.TimeSheetContext = TimeSheetContext;
         }
         [HttpPost("Create")]
-        public async Task<ActionResult> Create(Dto.Log log)
+        public async Task<ActionResult> Create(Dto.LogForCreate log)
         {
-            Models.Log ModelLog = new Models.Log {Id=log.Id, Start=log.Start, Stop=log.Stop, Description=log.Description, UserId= User.FindFirst(ClaimTypes.NameIdentifier).Value };
+            Models.Log ModelLog = new Models.Log { Start=log.Start, Stop=log.Stop, Description=log.Description, UserId= User.FindFirst(ClaimTypes.NameIdentifier).Value };
             await TimeSheetContext.Log.AddAsync(ModelLog);
             return Ok();
         }
