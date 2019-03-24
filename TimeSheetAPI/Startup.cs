@@ -73,6 +73,7 @@ namespace TimeSheetAPI
             //app.UseHttpsRedirection();
             app.UseMvc();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseAuthentication();
         }
     }
 }
