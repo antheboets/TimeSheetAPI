@@ -65,7 +65,8 @@ namespace TimeSheetAPI.Controllers
         public async Task<Dto.Log> Get()
         {
             var log = await TimeSheetContext.Log.Where(x => x.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefaultAsync();
-            return null;
+            Dto.Log DtoLog = new Dto.Log { Id = log.Id, Start=log.Start, Stop=log.Stop, Description=log.Description };
+            return DtoLog;
         }
         [HttpPost("Get")]
         public async Task<ICollection<Dto.Log>> Get([FromBody] Dto.TimeObject CurrentTimeObj)
