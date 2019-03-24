@@ -9,6 +9,6 @@ namespace TimeSheetAPI.Models
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string ProjectNr { get; set; }
+        public Project Project { get; set; }
     }
 }

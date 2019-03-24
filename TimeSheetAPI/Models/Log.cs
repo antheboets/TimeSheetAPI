@@ -12,6 +12,6 @@ namespace TimeSheetAPI.Models
         public DateTime Stop { get; set; }
         public string Description { get; set; }
         public Project Project { get; set; }
-        public int ActivityNr { get; set;}
+        public Activity Activity { get; set;}
     }
 }

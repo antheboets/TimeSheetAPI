@@ -103,17 +103,18 @@ namespace TimeSheetAPI.Migrations
                         .WithMany("Activitys")
                         .HasForeignKey("ProjectId");
                 });
-
+            
             modelBuilder.Entity("TimeSheetAPI.Models.Log", b =>
                 {
-                    b.HasOne("TimeSheetAPI.Models.Project", "ProjectId")
+                    b.HasOne("TimeSheetAPI.Models.Project", "Project")
                         .WithMany()
-                        .HasForeignKey("ProjectIdId");
+                        .HasForeignKey("ProjectId");
 
                     b.HasOne("TimeSheetAPI.Models.User")
                         .WithMany("Logs")
                         .HasForeignKey("UserId");
                 });
+                
 #pragma warning restore 612, 618
         }
     }
