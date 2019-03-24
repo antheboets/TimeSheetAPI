@@ -16,5 +16,10 @@ namespace TimeSheetAPI.Infrastructure
         public DbSet<Project> Project { get; set; }
         public DbSet<Activity> Activity { get; set; }
         public DbSet<Company> Company { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProjectUser>().HasKey(o => new { o.ProjectId, o.UserId });
+        }
     }
 }
