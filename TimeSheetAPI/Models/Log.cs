@@ -13,5 +13,6 @@ namespace TimeSheetAPI.Models
         public string Description { get; set; }
         public Project Project { get; set; }
         public Activity Activity { get; set;}
+        public string UserId { get; set; }
     }
 }
