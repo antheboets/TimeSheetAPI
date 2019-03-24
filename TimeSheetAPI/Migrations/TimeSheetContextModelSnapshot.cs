@@ -28,8 +28,6 @@ namespace TimeSheetAPI.Migrations
 
                     b.Property<string>("ProjectId");
 
-                    b.Property<string>("ProjectNr");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
@@ -42,11 +40,11 @@ namespace TimeSheetAPI.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("ActivityNr");
+                    b.Property<string>("ActivityId");
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("ProjectIdId");
+                    b.Property<string>("ProjectId");
 
                     b.Property<DateTime>("Start");
 
@@ -56,7 +54,9 @@ namespace TimeSheetAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectIdId");
+                    b.HasIndex("ActivityId");
+
+                    b.HasIndex("ProjectId");
 
                     b.HasIndex("UserId");
 
@@ -97,16 +97,20 @@ namespace TimeSheetAPI.Migrations
 
             modelBuilder.Entity("TimeSheetAPI.Models.Activity", b =>
                 {
-                    b.HasOne("TimeSheetAPI.Models.Project")
+                    b.HasOne("TimeSheetAPI.Models.Project", "Project")
                         .WithMany("Activitys")
                         .HasForeignKey("ProjectId");
                 });
 
             modelBuilder.Entity("TimeSheetAPI.Models.Log", b =>
                 {
-                    b.HasOne("TimeSheetAPI.Models.Project", "ProjectId")
+                    b.HasOne("TimeSheetAPI.Models.Activity", "Activity")
                         .WithMany()
-                        .HasForeignKey("ProjectIdId");
+                        .HasForeignKey("ActivityId");
+
+                    b.HasOne("TimeSheetAPI.Models.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId");
 
                     b.HasOne("TimeSheetAPI.Models.User")
                         .WithMany("Logs")

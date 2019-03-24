@@ -10,8 +10,8 @@ using TimeSheetAPI.Infrastructure;
 namespace TimeSheetAPI.Migrations
 {
     [DbContext(typeof(TimeSheetContext))]
-    [Migration("20190323233322_ProjetsActivitysAndUserUpdate")]
-    partial class ProjetsActivitysAndUserUpdate
+    [Migration("20190324002536_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,8 +30,6 @@ namespace TimeSheetAPI.Migrations
 
                     b.Property<string>("ProjectId");
 
-                    b.Property<string>("ProjectNr");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
@@ -44,11 +42,11 @@ namespace TimeSheetAPI.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("ActivityNr");
+                    b.Property<string>("ActivityId");
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("ProjectIdId");
+                    b.Property<string>("ProjectId");
 
                     b.Property<DateTime>("Start");
 
@@ -58,7 +56,9 @@ namespace TimeSheetAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectIdId");
+                    b.HasIndex("ActivityId");
+
+                    b.HasIndex("ProjectId");
 
                     b.HasIndex("UserId");
 
@@ -99,13 +99,17 @@ namespace TimeSheetAPI.Migrations
 
             modelBuilder.Entity("TimeSheetAPI.Models.Activity", b =>
                 {
-                    b.HasOne("TimeSheetAPI.Models.Project")
+                    b.HasOne("TimeSheetAPI.Models.Project", "Project")
                         .WithMany("Activitys")
                         .HasForeignKey("ProjectId");
                 });
-            
+
             modelBuilder.Entity("TimeSheetAPI.Models.Log", b =>
                 {
+                    b.HasOne("TimeSheetAPI.Models.Activity", "Activity")
+                        .WithMany()
+                        .HasForeignKey("ActivityId");
+
                     b.HasOne("TimeSheetAPI.Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId");
@@ -114,7 +118,6 @@ namespace TimeSheetAPI.Migrations
                         .WithMany("Logs")
                         .HasForeignKey("UserId");
                 });
-                
 #pragma warning restore 612, 618
         }
     }
