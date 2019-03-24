@@ -25,7 +25,7 @@ namespace TimeSheetAPI.Controllers
         public async Task<ActionResult> Create(Dto.LogForCreate log)
         {
             Models.Log ModelLog = new Models.Log { Start=log.Start, Stop=log.Stop, Description=log.Description, UserId= User.FindFirst(ClaimTypes.NameIdentifier).Value };
-            await TimeSheetContext.Log.AddAsync(ModelLog);
+            await TimeSheetContext.AddAsync(ModelLog);
             await TimeSheetContext.SaveChangesAsync();
             return Ok();
         }
