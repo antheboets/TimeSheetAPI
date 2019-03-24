@@ -84,5 +84,18 @@ namespace TimeSheetAPI.Controllers
             }
             return DtoLogs;
         }
+        [HttpGet("GetAll")]
+        public async Task<ICollection<Dto.Log>> GetAll()
+        {
+            var logs = await TimeSheetContext.Log.Where(x => x.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value).ToListAsync();
+
+            List<Dto.Log> DtoLogs = new List<Dto.Log>();
+
+            foreach (var log in logs)
+            {
+                DtoLogs.Add(new Dto.Log { Id = log.Id, Start = log.Start, Stop = log.Stop, Description = log.Description });
+            }
+            return DtoLogs;
+        }
     }
 }
