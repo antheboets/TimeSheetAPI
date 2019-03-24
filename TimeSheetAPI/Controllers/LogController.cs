@@ -26,6 +26,7 @@ namespace TimeSheetAPI.Controllers
         {
             Models.Log ModelLog = new Models.Log { Start=log.Start, Stop=log.Stop, Description=log.Description, UserId= User.FindFirst(ClaimTypes.NameIdentifier).Value };
             await TimeSheetContext.Log.AddAsync(ModelLog);
+            await TimeSheetContext.SaveChangesAsync();
             return Ok();
         }
         [HttpGet("Get")]
