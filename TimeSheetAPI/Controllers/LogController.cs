@@ -97,5 +97,21 @@ namespace TimeSheetAPI.Controllers
             }
             return DtoLogs;
         }
+        //todo get logs dynamic scrolling 20 per request
+        [HttpGet("GetList")]
+        public async Task<ICollection<Dto.Log>> GetList([FromQuery]int Page = 0){
+
+            if (Page < 0)
+            {
+                Page = 0;
+            }
+            var Logs = await TimeSheetContext.Log.Skip(Page * 20).Take((Page + 1) * 20).OrderBy(x => x.Start).ToListAsync();
+            List<Dto.Log> DtoLogs = new List<Dto.Log>();
+            foreach (var log in Logs)
+            {
+                DtoLogs.Add(new Dto.Log { Id = log.Id, Start = log.Start,Stop=log.Stop,Description=log.Description });
+            }
+            return DtoLogs;
+        }
     }
 }
