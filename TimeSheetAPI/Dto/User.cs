@@ -11,7 +11,7 @@ namespace TimeSheetAPI.Dto
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public Models.User.Roles Role { get; set; }
+        public Models.Role Role { get; set; }
         public ICollection<Log> Logs { get; set; }
 
     }

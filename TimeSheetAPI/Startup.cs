@@ -30,6 +30,7 @@ namespace TimeSheetAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             /*
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
@@ -38,6 +39,7 @@ namespace TimeSheetAPI
                        .AllowAnyHeader();
             }));
             */
+
             services.AddMvc();
             string connectionString = Configuration.GetConnectionString("TimeSheetDatabase");
             services.AddDbContext<TimeSheetContext>(options => options.UseSqlServer(connectionString));
