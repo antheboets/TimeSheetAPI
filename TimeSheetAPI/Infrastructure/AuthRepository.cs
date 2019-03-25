@@ -14,7 +14,7 @@ namespace TimeSheetAPI.Infrastructure
         {
             TimeSheetContext = timeSheetContext;
         }
-
+        
         public async Task<User> Login(string email, string password)
         {
             var user = await TimeSheetContext.User.Include(x => x.Role).FirstOrDefaultAsync(x => x.Email == email);
