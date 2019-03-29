@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TimeSheetAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TimeSheetAPI.Infrastructure
 {
@@ -62,12 +63,11 @@ namespace TimeSheetAPI.Infrastructure
 
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-
+            
             await TimeSheetContext.AddAsync(user);
             await TimeSheetContext.SaveChangesAsync();
             return user;
         }
-
         public async Task<bool> UserExists(string email)
         {
             if (await TimeSheetContext.User.AnyAsync(x => x.Email == email))
@@ -76,5 +76,6 @@ namespace TimeSheetAPI.Infrastructure
             }
             return false;
         }
+        //public async Task<ActionResult>
     }
 }

@@ -13,5 +13,9 @@ namespace TimeSheetAPI.Models
         public ICollection<User> UsersOnTheProject {get; set;}
         public ICollection<Log> Logs { get; set; }
         public Company Company { get; set; }
+        //todo change to english
+        public bool OverUren{ get; set; }
+        //todo change to english
+        public bool Billabel { get; set; }
     }
 }

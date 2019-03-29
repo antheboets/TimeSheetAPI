@@ -14,6 +14,8 @@ namespace TimeSheetAPI.Models
         public Byte[] PasswordHash { get; set; }
         public Byte[] PasswordSalt { get; set; }
         public Role Role { get; set; }
+        public DefaultWorkweek DefaultWorkweek { get; set; }
+        public ICollection<Day> ExceptionWorkDays { get; set; }
         public ICollection<Log> Logs { get; set; }
     }
 }
