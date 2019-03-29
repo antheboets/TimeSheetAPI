@@ -7,6 +7,7 @@ namespace TimeSheetAPI.Models
 {
     public class Day
     {
+        public String Id { get; set; }
         public DateTime Start { get; set; }
         public DateTime Stop { get; set; }
     }

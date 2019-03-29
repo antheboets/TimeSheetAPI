@@ -7,6 +7,7 @@ namespace TimeSheetAPI.Models
 {
     public class DefaultWorkweek
     {
+        public string Id { get; set; }
         public Day Monday { get; set; }
         public Day Tuesday { get; set; }
         public Day Wednesday { get; set; }
