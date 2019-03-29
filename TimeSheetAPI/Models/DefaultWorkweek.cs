@@ -7,7 +7,7 @@ namespace TimeSheetAPI.Models
 {
     public class DefaultWorkweek
     {
-        DefaultWorkweek()
+        public DefaultWorkweek()
         {
             this.Monday = new Day { Start = new DateTime(0, 0, 0, 9, 0, 0), Stop = new DateTime(0, 0, 0, 9, 0, 0) };
             this.Tuesday = new Day { Start = new DateTime(0, 0, 0, 9, 0, 0), Stop = new DateTime(0, 0, 0, 9, 0, 0) };
