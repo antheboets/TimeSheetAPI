@@ -61,6 +61,7 @@ namespace TimeSheetAPI.Controllers
 
             return logDto;
         }
+        [AllowAnonymous]
         [HttpGet("Test")]
         public async Task<Dto.Log> Get()
         {
@@ -71,10 +72,17 @@ namespace TimeSheetAPI.Controllers
         [HttpPost("Get")]
         public async Task<ICollection<Dto.Log>> Get([FromBody] Dto.TimeObject CurrentTimeObj)
         {
-
-            DateTime CurrentTime = CurrentTimeObj.Time;
+            DateTime CurrentTime;
+            if (CurrentTimeObj == null)
+            {
+                CurrentTime = DateTime.Now;
+            }
+            else
+            {
+                CurrentTime = CurrentTimeObj.Time;
+            }
             CurrentTimeObj.Time = CurrentTimeObj.Time.Date;
-            var thisWeekStart = CurrentTimeObj.Time.AddDays(-(int)CurrentTimeObj.Time.DayOfWeek + 1);
+            var thisWeekStart = CurrentTime.AddDays(-(int)CurrentTime.DayOfWeek + 1);
             var thisWeekEnd = thisWeekStart.AddDays(7).AddSeconds(-1);
             List<Models.Log> logs = await TimeSheetContext.Log.Where(x => x.Start > thisWeekStart).Where(x => x.Stop < thisWeekEnd).Where(x => x.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value).ToListAsync();
             List<Dto.Log> DtoLogs = new List<Dto.Log>();
@@ -94,6 +102,22 @@ namespace TimeSheetAPI.Controllers
             foreach (var log in logs)
             {
                 DtoLogs.Add(new Dto.Log { Id = log.Id, Start = log.Start, Stop = log.Stop, Description = log.Description });
+            }
+            return DtoLogs;
+        }
+        //todo get logs dynamic scrolling 20 per request
+        [HttpGet("GetList")]
+        public async Task<ICollection<Dto.Log>> GetList([FromQuery]int Page = 0)
+        {
+            if (Page < 0)
+            {
+                Page = 0;
+            }
+            var Logs = await TimeSheetContext.Log.Skip(Page * 20).Take((Page + 1) * 20).OrderBy(x => x.Start).ToListAsync();
+            List<Dto.Log> DtoLogs = new List<Dto.Log>();
+            foreach (var log in Logs)
+            {
+                DtoLogs.Add(new Dto.Log { Id = log.Id, Start = log.Start,Stop=log.Stop,Description=log.Description });
             }
             return DtoLogs;
         }
