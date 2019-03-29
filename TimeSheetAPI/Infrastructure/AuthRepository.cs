@@ -63,7 +63,10 @@ namespace TimeSheetAPI.Infrastructure
 
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-            
+
+            //user.DefaultWorkweek = new DefaultWorkweek();
+
+
             await TimeSheetContext.AddAsync(user);
             await TimeSheetContext.SaveChangesAsync();
             return user;
