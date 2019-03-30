@@ -47,24 +47,6 @@ namespace TimeSheetAPI.Migrations
                     b.ToTable("Company");
                 });
 
-            modelBuilder.Entity("TimeSheetAPI.Models.Day", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("Start");
-
-                    b.Property<DateTime>("Stop");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Day");
-                });
-
             modelBuilder.Entity("TimeSheetAPI.Models.DefaultWorkweek", b =>
                 {
                     b.Property<string>("Id")
@@ -206,6 +188,38 @@ namespace TimeSheetAPI.Migrations
                     b.ToTable("User");
                 });
 
+            modelBuilder.Entity("TimeSheetAPI.Models.WorkDay", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Start");
+
+                    b.Property<DateTime>("Stop");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WorkDay");
+                });
+
+            modelBuilder.Entity("TimeSheetAPI.Models.WorkDayException", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Start");
+
+                    b.Property<DateTime>("Stop");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("WorkDayException");
+                });
+
             modelBuilder.Entity("TimeSheetAPI.Models.Activity", b =>
                 {
                     b.HasOne("TimeSheetAPI.Models.Project", "Project")
@@ -213,40 +227,33 @@ namespace TimeSheetAPI.Migrations
                         .HasForeignKey("ProjectId");
                 });
 
-            modelBuilder.Entity("TimeSheetAPI.Models.Day", b =>
-                {
-                    b.HasOne("TimeSheetAPI.Models.User")
-                        .WithMany("ExceptionWorkDays")
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("TimeSheetAPI.Models.DefaultWorkweek", b =>
                 {
-                    b.HasOne("TimeSheetAPI.Models.Day", "Friday")
+                    b.HasOne("TimeSheetAPI.Models.WorkDay", "Friday")
                         .WithMany()
                         .HasForeignKey("FridayId");
 
-                    b.HasOne("TimeSheetAPI.Models.Day", "Monday")
+                    b.HasOne("TimeSheetAPI.Models.WorkDay", "Monday")
                         .WithMany()
                         .HasForeignKey("MondayId");
 
-                    b.HasOne("TimeSheetAPI.Models.Day", "Saturday")
+                    b.HasOne("TimeSheetAPI.Models.WorkDay", "Saturday")
                         .WithMany()
                         .HasForeignKey("SaturdayId");
 
-                    b.HasOne("TimeSheetAPI.Models.Day", "Sunday")
+                    b.HasOne("TimeSheetAPI.Models.WorkDay", "Sunday")
                         .WithMany()
                         .HasForeignKey("SundayId");
 
-                    b.HasOne("TimeSheetAPI.Models.Day", "Thursday")
+                    b.HasOne("TimeSheetAPI.Models.WorkDay", "Thursday")
                         .WithMany()
                         .HasForeignKey("ThursdayId");
 
-                    b.HasOne("TimeSheetAPI.Models.Day", "Tuesday")
+                    b.HasOne("TimeSheetAPI.Models.WorkDay", "Tuesday")
                         .WithMany()
                         .HasForeignKey("TuesdayId");
 
-                    b.HasOne("TimeSheetAPI.Models.Day", "Wednesday")
+                    b.HasOne("TimeSheetAPI.Models.WorkDay", "Wednesday")
                         .WithMany()
                         .HasForeignKey("WednesdayId");
                 });
@@ -299,6 +306,13 @@ namespace TimeSheetAPI.Migrations
                     b.HasOne("TimeSheetAPI.Models.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId");
+                });
+
+            modelBuilder.Entity("TimeSheetAPI.Models.WorkDayException", b =>
+                {
+                    b.HasOne("TimeSheetAPI.Models.User")
+                        .WithMany("ExceptionWorkDays")
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }
