@@ -66,6 +66,7 @@ namespace TimeSheetAPI.Infrastructure
 
             user.DefaultWorkweek = new DefaultWorkweek();
 
+            user.Role = new Role { Name="Consultant" };
             await TimeSheetContext.AddAsync(user);
             await TimeSheetContext.SaveChangesAsync();
             return user;
