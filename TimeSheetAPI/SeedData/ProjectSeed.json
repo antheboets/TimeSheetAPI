@@ -1,0 +1,70 @@
+[
+  {
+    "Id": "dae4086e-8a2e-48cd-a6ed-27c90d754780",
+    "Name": "ProjectA1",
+    /*"Activitys": [
+      {
+        "Id": "",
+        "Name": "Coding"
+      },
+      {
+        "Id": "",
+        "Name": "Testing"
+      }
+    ],*/
+    "CompanyId": "9c514f27-fe7a-4dd3-91fa-3bd5f4a1125c",
+    "Overtime": "True",
+    "Billable": "False"
+  },
+  {
+    "Id": "dc20b924-57f1-465d-a0ba-336d5ee95670",
+    "Name": "ProjectA2",
+    /*"Activitys": [
+      {
+        "Id": "",
+        "Name": "Coding"
+      },
+      {
+        "Id": "",
+        "Name": "Testing"
+      }
+    ],*/
+    "CompanyId": "9c514f27-fe7a-4dd3-91fa-3bd5f4a1125c",
+    "Overtime": "True",
+    "Billable": "False"
+  },
+  {
+    "Id": "1c602287-6d31-4dc8-b9c8-9828bc58898d",
+    "Name": "ProjectB1",
+    /*"Activitys": [
+      {
+        "Id": "",
+        "Name": "Coding"
+      },
+      {
+        "Id": "",
+        "Name": "Testing"
+      }
+    ],*/
+    "CompanyId": "9c514f27-fe7a-4dd3-91fa-3bd5f4a1125c",
+    "Overtime": "True",
+    "Billable": "False"
+  },
+  {
+    "Id": "69dfbceb-cead-4805-a4c3-260035d85e80",
+    "Name": "ProjectB2",
+    /*"Activitys": [
+      {
+        "Id": "",
+        "Name": "Coding"
+      },
+      {
+        "Id": "",
+        "Name": "Testing"
+      }
+    ],*/
+    "CompanyId": "9c514f27-fe7a-4dd3-91fa-3bd5f4a1125c",
+    "Overtime": "True",
+    "Billable": "False"
+  }
+]
