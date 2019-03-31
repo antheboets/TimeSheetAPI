@@ -24,7 +24,24 @@ namespace TimeSheetAPI.Controllers
         [HttpPost("Create")]
         public async Task<ActionResult> Create(Dto.LogForCreate log)
         {
-            Models.Log ModelLog = new Models.Log { Start=log.Start, Stop=log.Stop, Description=log.Description, UserId= User.FindFirst(ClaimTypes.NameIdentifier).Value, Activity= new Models.Activity(), Project = new Models.Project() };
+            if (log.ProjectId ==null  || log.ProjectId == "")
+            {
+                return BadRequest("no projectId");
+            }
+            Models.Project project = await TimeSheetContext.Project.Where(x => x.Id== log.ProjectId).SingleOrDefaultAsync();
+            if (project == null)
+            {
+                return BadRequest("no projectId");
+            }
+            Models.Log ModelLog = new Models.Log { Start=log.Start, Stop=log.Stop, Description=log.Description, UserId= User.FindFirst(ClaimTypes.NameIdentifier).Value, Project = project };
+            if (log.ActivityId != null || log.ActivityId != "")
+            {
+                Models.Activity activity = await TimeSheetContext.Activity.Where(x => x.Id == log.ActivityId).SingleOrDefaultAsync();
+                if (activity != null)
+                {
+                    ModelLog.Activity = activity;
+                }
+            }
             await TimeSheetContext.AddAsync(ModelLog);
             await TimeSheetContext.SaveChangesAsync();
             return Ok();

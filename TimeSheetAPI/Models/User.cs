@@ -13,6 +13,7 @@ namespace TimeSheetAPI.Models
         public string Email { get; set; }
         public Byte[] PasswordHash { get; set; }
         public Byte[] PasswordSalt { get; set; }
+        public string RoleId { get; set; }
         public Role Role { get; set; }
         public DefaultWorkweek DefaultWorkweek { get; set; }
         public ICollection<WorkDayException> ExceptionWorkDays { get; set; }
