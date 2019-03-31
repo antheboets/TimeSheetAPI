@@ -49,7 +49,7 @@ namespace TimeSheetAPI.Infrastructure
                 user.PasswordSalt = passwordSalt;
                 
 
-                user.DefaultWorkweek = new DefaultWorkweek();
+                //user.DefaultWorkweek = new DefaultWorkweek();
                 timeSheetContext.User.Add(user);
             }
             timeSheetContext.SaveChanges();
@@ -62,11 +62,60 @@ namespace TimeSheetAPI.Infrastructure
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
+        public void SeedDefaultWorkweek()
+        {
+            var DefaultWorkweekData = System.IO.File.ReadAllText("./SeedData/DefaultWorkweekSeed.json");
+            List<DefaultWorkweek> defaultWorkweeklist = JsonConvert.DeserializeObject<List<DefaultWorkweek>>(DefaultWorkweekData);
+            foreach (var defaultWorkweek in defaultWorkweeklist)
+            {
+                timeSheetContext.DefaultWorkweek.Add(defaultWorkweek);
+            }
+            timeSheetContext.SaveChanges();
+        }
+        public void SeedProject()
+        {
+            var ProjectData = System.IO.File.ReadAllText("./SeedData/ProjectSeed.json");
+            List<Project> Projects = JsonConvert.DeserializeObject<List<Project>>(ProjectData);
+            foreach (var project in Projects)
+            {
+                timeSheetContext.Project.Add(project);
+            }
+            timeSheetContext.SaveChanges();
+        }
+        public void SeedProjectUsers()
+        {
+            var ProjectUserData = System.IO.File.ReadAllText("./SeedData/ProjectUserSeed.json");
+            List<ProjectUser> ProjectUsers = JsonConvert.DeserializeObject<List<ProjectUser>>(ProjectUserData);
+            foreach (var projectUser in ProjectUsers)
+            {
+                timeSheetContext.ProjectUser.Add(projectUser);
+            }
+            timeSheetContext.SaveChanges();
+        }
+        public void SeedActivity()
+        {
+
+        }
+        public void SeedLog()
+        {
+            var LogData = System.IO.File.ReadAllText("./SeedData/LogSeed.json");
+            List<Log> Logs = JsonConvert.DeserializeObject<List<Log>>(LogData);
+            foreach (var log in Logs)
+            {
+                timeSheetContext.Log.Add(log);
+            }
+            timeSheetContext.SaveChanges();
+        }
         public void SeedAll()
         {
             SeedCompany();
             SeedRole();
+            SeedDefaultWorkweek();
             SeedUser();
+            SeedProject();
+            SeedProjectUsers();
+            //SeedActivity();
+            SeedLog();
         }
     }
 }
