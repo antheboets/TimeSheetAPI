@@ -54,10 +54,11 @@ namespace TimeSheetAPI
                     ValidateAudience = false
                 };
             });
+            services.AddTransient<Seed>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env,TimeSheetContext timeSheetContext)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,TimeSheetContext timeSheetContext, Seed seeder)
         {
 
             //app.UseCors("MyPolicy");
@@ -71,11 +72,12 @@ namespace TimeSheetAPI
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
             //app.UseHttpsRedirection();
+            //seeder.SeedAll();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
             app.UseMvc();
+
         }
     }
 }

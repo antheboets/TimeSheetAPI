@@ -2,7 +2,7 @@
 
 namespace TimeSheetAPI.Migrations
 {
-    public partial class AddingUserIdByLog : Migration
+    public partial class MoreIds : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace TimeSheetAPI.Models
 {
-    public class Day
+    public class WorkDay
     {
-        public String Id { get; set; }
+        public string Id { get; set; }
         public DateTime Start { get; set; }
         public DateTime Stop { get; set; }
     }
