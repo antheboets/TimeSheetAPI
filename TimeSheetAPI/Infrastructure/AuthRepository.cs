@@ -106,7 +106,10 @@ namespace TimeSheetAPI.Infrastructure
                 }
                 else
                 {
-                    VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt);
+                    Byte[] PasswordHash, PasswordSalt;
+                    CreatePasswordHash(password,out PasswordHash,out PasswordSalt);
+                    user.PasswordHash = PasswordHash;
+                    user.PasswordSalt = PasswordSalt;
                     TimeSheetContext.Update(user);
                 }
                 await TimeSheetContext.SaveChangesAsync();
