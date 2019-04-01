@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 
 namespace TimeSheetAPI.Models
 {
-    public class Activity
+    public class WorkDay
     {
         public string Id { get; set; }
-        public string Name { get; set; }
-        public string ProjectId { get; set; }
-        public Project Project { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime Stop { get; set; }
     }
 }

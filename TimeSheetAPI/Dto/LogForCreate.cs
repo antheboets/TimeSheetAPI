@@ -9,6 +9,8 @@ namespace TimeSheetAPI.Dto
     {
         public DateTime Start { get; set; }
         public DateTime Stop { get; set; }
-        public String Description { get; set; }
+        public string Description { get; set; }
+        public string ProjectId { get; set; }
+        public string ActivityId { get; set; }
     }
 }

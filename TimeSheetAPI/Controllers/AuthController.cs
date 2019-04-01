@@ -46,12 +46,22 @@ namespace TimeSheetAPI.Controllers
             {
                 return Unauthorized();
             }
+            
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id),
                 new Claim(ClaimTypes.Email, userFromRepo.Email),
                 new Claim(ClaimTypes.Role, userFromRepo.Role.Name)
             };
+            
+            /*
+             * TODO remove this code if the code above doesnt work
+            var claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id));
+            claims.Add(new Claim(ClaimTypes.Email, userFromRepo.Email));
+            claims.Add(new Claim(ClaimTypes.Role, userFromRepo.Role.Name));
+            */
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Config.GetSection("AppSettings:Token").Value));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var tokenDescriptor = new SecurityTokenDescriptor

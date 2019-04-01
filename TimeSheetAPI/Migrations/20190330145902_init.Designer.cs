@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TimeSheetAPI.Infrastructure;
 
 namespace TimeSheetAPI.Migrations
 {
     [DbContext(typeof(TimeSheetContext))]
-    partial class TimeSheetContextModelSnapshot : ModelSnapshot
+    [Migration("20190330145902_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,13 +120,13 @@ namespace TimeSheetAPI.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Billable");
+                    b.Property<bool>("Billabel");
 
                     b.Property<string>("CompanyId");
 
                     b.Property<string>("Name");
 
-                    b.Property<bool>("Overtime");
+                    b.Property<bool>("OverUren");
 
                     b.HasKey("Id");
 
