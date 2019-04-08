@@ -94,7 +94,13 @@ namespace TimeSheetAPI.Infrastructure
         }
         public void SeedActivity()
         {
-
+            var ActivityData = System.IO.File.ReadAllText("./SeedData/ActivitySeed.json");
+            List<Activity> activities  = JsonConvert.DeserializeObject<List<Activity>>(ActivityData);
+            foreach (var activity in activities)
+            {
+                timeSheetContext.Activity.Add(activity);
+            }
+            timeSheetContext.SaveChanges();
         }
         public void SeedLog()
         {
@@ -114,7 +120,7 @@ namespace TimeSheetAPI.Infrastructure
             SeedUser();
             SeedProject();
             SeedProjectUsers();
-            //SeedActivity();
+            SeedActivity();
             SeedLog();
         }
     }

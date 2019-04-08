@@ -70,5 +70,32 @@ namespace TimeSheetAPI.Controllers
            
             return null;
         }
+        [AllowAnonymous]
+        [HttpGet("Test")]
+        public async Task<List<Dto.Project>> Test()
+        {
+            List<Models.Project> projects = await TimeSheetContext.Project.Include(x => x.Activitys).Include(x => x.UsersOnTheProject).Include(x => x.Logs).ToListAsync();
+            List<Dto.Project> projectsDto = new List<Project>();
+            foreach (var project in projects)
+            {
+                List<string> activityIds = new List<string>();
+                foreach (var activity in project.Activitys)
+                {
+                    activityIds.Add(activity.Id);
+                }
+                List<string> logsIds = new List<string>();
+                foreach (var log in project.Logs)
+                {
+                    logsIds.Add(log.Id);
+                }
+                List<string> userIds = new List<string>();
+                foreach (var user in project.UsersOnTheProject)
+                {
+                    userIds.Add(user.Id);
+                }
+                projectsDto.Add(new Project { Id = project.Id, Name = project.Name, CompanyId = project.CompanyId, Billable = project.Billable, Overtime = project.Overtime, ActivitysId = activityIds, LogsId = logsIds, UsersId = userIds });
+            }
+            return projectsDto;
+        }
     }
 }
