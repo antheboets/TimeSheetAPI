@@ -55,7 +55,7 @@ namespace TimeSheetAPI.Controllers
             };
             
             /*
-             * TODO remove this code if the code above doesnt work
+             * TODO remove this code if the code above does work
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id));
             claims.Add(new Claim(ClaimTypes.Email, userFromRepo.Email));
@@ -74,6 +74,13 @@ namespace TimeSheetAPI.Controllers
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return Ok(new {token = tokenHandler.WriteToken(token)});
+        }
+        [HttpPost("NewPass")]
+        public async Task<ActionResult> ChangePassword([FromBody] Dto.AuthNewPass authNewPass)
+        {
+            Dto.UserId userId = new UserId { Id = User.FindFirst(ClaimTypes.NameIdentifier).Value };
+            await Repo.ChangePassword(userId, authNewPass.Password);
+            return Ok();
         }
     }
 
