@@ -15,13 +15,13 @@ namespace TimeSheetAPI.Infrastructure
     {
         private readonly RequestDelegate requestDelegate;
         private readonly IConfiguration Config;
-        private readonly ICollection<string> APIKeyToCheck;
+        private readonly string APIKeyToCheck;
         private const string headerKey = "APIKey";
         public APIKeyHandler(RequestDelegate requestDelegate, IConfiguration Config)
         {
             this.requestDelegate = requestDelegate;
             this.Config = Config;
-            APIKeyToCheck = Config.GetSection("APIKey:key").Get<string[]>().ToList();
+            APIKeyToCheck = Config.GetSection("APIKey:key").Value;
   
         }
         public async Task Invoke(HttpContext context)
