@@ -114,7 +114,7 @@ namespace TimeSheetAPI.Infrastructure
             SeedUser();
             SeedProject();
             SeedProjectUsers();
-            //SeedActivity();
+            SeedActivity();
             SeedLog();
         }
     }
