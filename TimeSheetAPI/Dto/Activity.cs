@@ -5,13 +5,10 @@ using System.Threading.Tasks;
 
 namespace TimeSheetAPI.Dto
 {
-    public class User
+    public class Activity
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Email { get; set; }
-        public Models.Role Role { get; set; }
-        public ICollection<string> Logs { get; set; }
-
+        public string ProjectId { get; set; }
     }
 }
