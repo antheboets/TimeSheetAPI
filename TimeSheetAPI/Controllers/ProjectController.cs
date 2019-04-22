@@ -65,10 +65,15 @@ namespace TimeSheetAPI.Controllers
             return Ok();
         }
         [HttpGet("GetList")]
-        public async Task<ICollection<ProjectWithoutLogs>> GetList()
+        public async Task<ICollection<Dto.ProjectWithoutLogs>> GetList()
         {
-           
-            return null;
+            var Project = await TimeSheetContext.Project.ToListAsync();
+            List<Dto.ProjectWithoutLogs> projects = new List<ProjectWithoutLogs>();
+            foreach (var item in Project)
+            {
+                projects.Add(new ProjectWithoutLogs { Id = item.Id, Name = item.Name, CompanyId = item.CompanyId, Billable = item.Billable, Overtime = item.Overtime });
+            }
+            return projects;
         }
         [AllowAnonymous]
         [HttpGet("Test")]
