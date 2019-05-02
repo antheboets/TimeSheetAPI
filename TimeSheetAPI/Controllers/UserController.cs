@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TimeSheetAPI.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -19,14 +19,6 @@ namespace TimeSheetAPI.Controllers
         public UserController(TimeSheetContext TimeSheetContext)
         {
             this.TimeSheetContext = TimeSheetContext;
-        }
-        [HttpPost("testilja")]
-        public void TestIlja()
-        {
-            var test = TimeSheetContext.Role.Where(x => x.Id == "5286f545-46df-4ccc-945d-515de9ebe516").Single();
-            test.Name += test.Name + "a";
-            TimeSheetContext.Add(test);
-            TimeSheetContext.SaveChanges();
         }
         [HttpPost("Get")]
         public async Task<Dto.User> GetById([FromBody] Dto.User input)
