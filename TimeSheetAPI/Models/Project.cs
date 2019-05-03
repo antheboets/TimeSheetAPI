@@ -14,6 +14,7 @@ namespace TimeSheetAPI.Models
         public ICollection<Log> Logs { get; set; }
         public string CompanyId { get; set; }
         public Company Company { get; set; }
+        public bool InProgress { get; set; }
         public bool Overtime { get; set; }
         public bool Billable { get; set; }
     }
