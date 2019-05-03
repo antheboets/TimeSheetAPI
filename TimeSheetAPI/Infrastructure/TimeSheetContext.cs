@@ -22,6 +22,8 @@ namespace TimeSheetAPI.Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProjectUser>().HasKey(o => new { o.ProjectId, o.UserId });
+            //modelBuilder.Entity<Project>().HasOptional(a => a.Logs).WithOptionalDependent().WillCascadeOnDelete(true);
+
         }
     }
 }

@@ -49,7 +49,7 @@ namespace TimeSheetAPI.Controllers
             return Ok();
         }
         [HttpPost("Delete")]
-        public async Task<ActionResult> Delete(Dto.ProjectForUpdate Project)
+        public async Task<ActionResult> Delete(Dto.ProjectForDelete Project)
         {
             if (User.FindFirst(ClaimTypes.Role).Value == "")
             {
