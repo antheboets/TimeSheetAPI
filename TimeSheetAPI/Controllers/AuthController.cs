@@ -78,7 +78,9 @@ namespace TimeSheetAPI.Controllers
         [HttpPost("NewPass")]
         public async Task<ActionResult> ChangePassword([FromBody] Dto.AuthNewPass authNewPass)
         {
+
             Dto.UserId userId = new UserId { Id = User.FindFirst(ClaimTypes.NameIdentifier).Value };
+
             await Repo.ChangePassword(userId, authNewPass.Password);
             return Ok();
         }

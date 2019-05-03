@@ -7,6 +7,7 @@ namespace TimeSheetAPI.Dto
 {
     public class AuthNewPass
     {
-        public string Password { get; set; }
+        public string OldPassword { get; set; }
+        public string NewPassword { get; set; }
     }
 }
