@@ -106,8 +106,7 @@ namespace TimeSheetAPI.Infrastructure
                 }
                 else
                 {
-                    Byte[] PasswordHash, PasswordSalt;
-                    CreatePasswordHash(password,out PasswordHash,out PasswordSalt);
+                    CreatePasswordHash(password,out byte[] PasswordHash, out byte[] PasswordSalt);
                     user.PasswordHash = PasswordHash;
                     user.PasswordSalt = PasswordSalt;
                     TimeSheetContext.Update(user);
