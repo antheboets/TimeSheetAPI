@@ -38,13 +38,6 @@ namespace TimeSheetAPI.Controllers
 
             return StatusCode(201);
         }
-        /*
-        [HttpGet("azure")]
-        public Dto.Test AzureTest()
-        {
-            return new Dto.Test { Testval = Config.GetSection("a").Value };
-        }
-        */
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] Dto.UserForLogin user)
         {
