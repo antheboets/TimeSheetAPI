@@ -10,7 +10,6 @@ namespace TimeSheetAPI.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public ICollection<Activity> Activitys { get; set; }
-
         public ICollection<User> UsersOnTheProject {get; set;}
         public ICollection<Log> Logs { get; set; }
         public string CompanyId { get; set; }

@@ -10,29 +10,29 @@ using TimeSheetAPI.Models;
 
 namespace TimeSheetAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("controller")]
     [ApiController]
     public class ActivitiesController : ControllerBase
     {
-        private readonly TimeSheetContext _context;
+        private readonly TimeSheetContext Repo;
 
-        public ActivitiesController(TimeSheetContext context)
+        public ActivitiesController(TimeSheetContext repo)
         {
-            _context = context;
+            Repo = repo;
         }
 
         // GET: api/Activities
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Activity>>> GetActivity()
         {
-            return await _context.Activity.ToListAsync();
+            return await Repo.Activity.ToListAsync();
         }
 
         // GET: api/Activities/5
-        [HttpGet("{id}")]
+        [HttpGet("Get")]
         public async Task<ActionResult<Activity>> GetActivity(string id)
         {
-            var activity = await _context.Activity.FindAsync(id);
+            var activity = await Repo.Activity.FindAsync(id);
 
             if (activity == null)
             {
@@ -43,7 +43,7 @@ namespace TimeSheetAPI.Controllers
         }
 
         // PUT: api/Activities/5
-        [HttpPut("{id}")]
+        [HttpPost("")]
         public async Task<IActionResult> PutActivity(string id, Activity activity)
         {
             if (id != activity.Id)
@@ -51,11 +51,11 @@ namespace TimeSheetAPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(activity).State = EntityState.Modified;
+            Repo.Entry(activity).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await Repo.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -76,31 +76,31 @@ namespace TimeSheetAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Activity>> PostActivity(Activity activity)
         {
-            _context.Activity.Add(activity);
-            await _context.SaveChangesAsync();
+            Repo.Activity.Add(activity);
+            await Repo.SaveChangesAsync();
 
             return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
         }
 
         // DELETE: api/Activities/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Activity>> DeleteActivity(string id)
+        [HttpDelete("Delete")]
+        public async Task<ActionResult<Activity>> DeleteActivity([FromBody] Dto.ActivityForDelete activityForDelete)
         {
-            var activity = await _context.Activity.FindAsync(id);
+            var activity = await Repo.Activity.FindAsync(activityForDelete.Id);
             if (activity == null)
             {
                 return NotFound();
             }
 
-            _context.Activity.Remove(activity);
-            await _context.SaveChangesAsync();
+            Repo.Activity.Remove(activity);
+            await Repo.SaveChangesAsync();
 
             return activity;
         }
 
         private bool ActivityExists(string id)
         {
-            return _context.Activity.Any(e => e.Id == id);
+            return Repo.Activity.Any(e => e.Id == id);
         }
     }
 }

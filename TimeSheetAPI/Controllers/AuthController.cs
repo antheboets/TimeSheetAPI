@@ -22,8 +22,8 @@ namespace TimeSheetAPI.Controllers
         private readonly IConfiguration Config;
         public AuthController(IAuthRepository repo, IConfiguration config)
         {
-            this.Repo = repo;
-            this.Config = config;
+            Repo = repo;
+            Config = config;
         }
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] Dto.UserForRegister user)
@@ -81,9 +81,8 @@ namespace TimeSheetAPI.Controllers
 
             Dto.UserId userId = new UserId { Id = User.FindFirst(ClaimTypes.NameIdentifier).Value };
 
-            await Repo.ChangePassword(userId, authNewPass.Password);
+            await Repo.ChangePassword(userId, authNewPass.NewPassword);
             return Ok();
         }
     }
-
 }

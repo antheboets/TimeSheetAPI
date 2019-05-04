@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using TimeSheetAPI.Dto;
 using TimeSheetAPI.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace TimeSheetAPI.Controllers
 {
@@ -42,6 +43,19 @@ namespace TimeSheetAPI.Controllers
             {
                 return new Dto.User();
             }
+        }
+        [HttpPost("Update")]
+        public async Task<ActionResult> Update([FromBody]Dto.UserForUpdate userForUpdate)
+        {
+            //var model = new User { Id = , Email=userForUpdate.Email, Name= userForUpdate.Name};
+            if (User.FindFirst(ClaimTypes.NameIdentifier).Value != userForUpdate.Id)
+            {
+                return BadRequest();
+            }
+            var model = new User { Id = userForUpdate.Id , Email = userForUpdate.Email, Name = userForUpdate.Name };
+            TimeSheetContext.Update(model);
+            await TimeSheetContext.SaveChangesAsync();
+            return Ok();
         }
         [AllowAnonymous]
         [HttpGet("test")]
