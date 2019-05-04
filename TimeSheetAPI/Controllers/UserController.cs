@@ -30,14 +30,14 @@ namespace TimeSheetAPI.Controllers
                 return new Dto.User();
             }
             Models.User User = await TimeSheetContext.User.Include(x => x.Logs).SingleAsync(x => x.Id == input.Id);
-            ICollection<Dto.Log> Logs = new List<Dto.Log>();
+            ICollection<string> LogsIds = new List<string>();
             if (User != null)
             {
                 foreach (var log in User.Logs)
                 {
-                    Logs.Add(new Dto.Log { Id = log.Id, Start = log.Start, Stop = log.Stop, Description = log.Description });
+                    LogsIds.Add(log.Id);
                 }
-                return new Dto.User { Id = User.Id, Name = User.Name, Email = User.Email, Logs = Logs };
+                return new Dto.User { Id = User.Id, Name = User.Name, Email = User.Email, Logs = LogsIds };
             }
             else
             {
@@ -59,13 +59,20 @@ namespace TimeSheetAPI.Controllers
         }
         [AllowAnonymous]
         [HttpGet("test")]
-        public async Task<Dto.User> Test()
+        public async Task<List<Dto.User>> Test()
         {
-            
-            Models.User User = await TimeSheetContext.User.FirstAsync();
-
-            return new Dto.User { Id = User.Id, Name = User.Name, Email = User.Email, Role=User.Role}; 
-            
+            List<Models.User> User = await TimeSheetContext.User.Include(x => x.Role).Include(x => x.Logs).ToListAsync();
+            List<Dto.User> UserDtoList = new List<User>();
+            foreach (var user  in User)
+            {
+                List<string> logsIds = new List<string>(); 
+                foreach (var log in user.Logs)
+                {
+                    logsIds.Add(log.Id);
+                }
+                UserDtoList.Add(new Dto.User { Id = user.Id, Name = user.Name, Email = user.Email, Role = user.Role, Logs = logsIds });
+            }
+            return UserDtoList;
         }
     }
 }
