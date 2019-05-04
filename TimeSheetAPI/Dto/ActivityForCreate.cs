@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace TimeSheetAPI.Dto
 {
-    public class AuthNewPass
+    public class ActivityForCreate
     {
-        public string OldPassword { get; set; }
-        public string NewPassword { get; set; }
+        public string Name { get; set; }
+        public string ProjectId { get; set; }
     }
 }

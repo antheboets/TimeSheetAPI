@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TimeSheetAPI.Infrastructure;
 
 namespace TimeSheetAPI.Migrations
 {
     [DbContext(typeof(TimeSheetContext))]
-    partial class TimeSheetContextModelSnapshot : ModelSnapshot
+    [Migration("20190504101856_ChangeHistory")]
+    partial class ChangeHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,8 +123,6 @@ namespace TimeSheetAPI.Migrations
                     b.Property<bool>("Billable");
 
                     b.Property<string>("CompanyId");
-
-                    b.Property<bool>("InProgress");
 
                     b.Property<string>("Name");
 
