@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TimeSheetAPI.Migrations
 {
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -51,8 +51,9 @@ namespace TimeSheetAPI.Migrations
                     Id = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     CompanyId = table.Column<string>(nullable: true),
-                    OverUren = table.Column<bool>(nullable: false),
-                    Billabel = table.Column<bool>(nullable: false)
+                    InProgress = table.Column<bool>(nullable: false),
+                    Overtime = table.Column<bool>(nullable: false),
+                    Billable = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -155,6 +156,7 @@ namespace TimeSheetAPI.Migrations
                     PasswordSalt = table.Column<byte[]>(nullable: true),
                     RoleId = table.Column<string>(nullable: true),
                     DefaultWorkweekId = table.Column<string>(nullable: true),
+                    ChangeHistory = table.Column<bool>(nullable: false),
                     ProjectId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

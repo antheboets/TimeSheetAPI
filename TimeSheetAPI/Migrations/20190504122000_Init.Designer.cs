@@ -10,8 +10,8 @@ using TimeSheetAPI.Infrastructure;
 namespace TimeSheetAPI.Migrations
 {
     [DbContext(typeof(TimeSheetContext))]
-    [Migration("20190331191852_projectUserAsDbSet")]
-    partial class ProjectUserAsDbSet
+    [Migration("20190504122000_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -124,6 +124,8 @@ namespace TimeSheetAPI.Migrations
 
                     b.Property<string>("CompanyId");
 
+                    b.Property<bool>("InProgress");
+
                     b.Property<string>("Name");
 
                     b.Property<bool>("Overtime");
@@ -164,6 +166,8 @@ namespace TimeSheetAPI.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("ChangeHistory");
 
                     b.Property<string>("DefaultWorkweekId");
 
