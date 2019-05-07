@@ -12,5 +12,6 @@ namespace TimeSheetAPI.Dto
         public DateTime Stop { get; set; }
         public String Description { get; set; }
         public string UserId { get; set; }
+        public string ActivityId { get; set; }
     }
 }

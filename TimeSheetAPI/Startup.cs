@@ -30,21 +30,15 @@ namespace TimeSheetAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            /*
-            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
-            {
-                builder.AllowAnyOrigin()
-                       .AllowAnyMethod()
-                       .AllowAnyHeader();
-            }));
-            */
-
             services.AddMvc();
             string connectionString = Configuration.GetConnectionString("TimeSheetDatabase");
             services.AddDbContext<TimeSheetContext>(options => options.UseSqlServer(connectionString));
             services.AddCors();
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<ILogRepository, LogRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IActivityRepository, ActivityRepository>();
+            services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(Options => {
                 Options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -60,8 +54,6 @@ namespace TimeSheetAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,TimeSheetContext timeSheetContext, Seed seeder)
         {
-
-            //app.UseCors("MyPolicy");
             timeSheetContext.Database.Migrate();
             if (env.IsDevelopment())
             {
@@ -73,7 +65,7 @@ namespace TimeSheetAPI
                 app.UseHsts();
             }
             //app.UseHttpsRedirection();
-            seeder.SeedAll();
+            //seeder.SeedAll();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAPIKeyHandler();
             app.UseAuthentication();
