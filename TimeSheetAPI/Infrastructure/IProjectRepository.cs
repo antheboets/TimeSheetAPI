@@ -7,5 +7,7 @@ namespace TimeSheetAPI.Infrastructure
 {
     interface IProjectRepository
     {
+        Task<bool> Create(Models.Project project);
+        Task<Models.Project> Get(Models.Project project);
     }
 }

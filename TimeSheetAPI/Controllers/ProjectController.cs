@@ -29,7 +29,6 @@ namespace TimeSheetAPI.Controllers
                 Unauthorized();
             }
 
-
             var ModelProject = new Models.Project { Name = Project.Name};
 
             await TimeSheetContext.AddAsync(ModelProject);

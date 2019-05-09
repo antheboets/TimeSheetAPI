@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeSheetAPI.Models;
 
 namespace TimeSheetAPI.Infrastructure
 {
@@ -13,5 +14,27 @@ namespace TimeSheetAPI.Infrastructure
             this.TimeSheetContext = TimeSheetContext;
         }
 
+        public async Task<bool> Create(Project project)
+        {
+            if (project == null)
+            {
+                return false;
+            }
+            if (project.Company == null) {
+                return false;
+            }
+            if (project.Company == null)
+            {
+                return false;
+            }
+            await TimeSheetContext.AddAsync(project);
+            await TimeSheetContext.SaveChangesAsync();
+            return true;
+        }
+
+        public Task<Project> Get(Project project)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
