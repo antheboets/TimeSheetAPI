@@ -70,7 +70,6 @@ namespace TimeSheetAPI
             app.UseAPIKeyHandler();
             app.UseAuthentication();
             app.UseMvc();
-
         }
     }
 }

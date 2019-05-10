@@ -17,9 +17,9 @@ namespace TimeSheetAPI.Controllers
     {
         private readonly TimeSheetContext Repo;
 
-        public ActivitiesController(TimeSheetContext repo)
+        public ActivitiesController(TimeSheetContext Repo)
         {
-            Repo = repo;
+            this.Repo = Repo;
         }
 
         // GET: api/Activities

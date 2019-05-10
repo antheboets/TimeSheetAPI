@@ -16,11 +16,11 @@ namespace TimeSheetAPI.Controllers
     [ApiController]
     public class ActivityController
     {
-        private readonly TimeSheetContext timeSheetContext;
+        private readonly IActivityRepository Repo;
 
-        public ActivityController(TimeSheetContext timeSheetContext)
+        public ActivityController(TimeSheetContext Repo)
         {
-            this.timeSheetContext = timeSheetContext;
+            this.Repo = Repo;
         }
         [AllowAnonymous]
         [HttpGet("Test")]
