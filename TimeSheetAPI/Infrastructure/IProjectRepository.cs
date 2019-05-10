@@ -5,9 +5,13 @@ using System.Threading.Tasks;
 
 namespace TimeSheetAPI.Infrastructure
 {
-    interface IProjectRepository
+    public interface IProjectRepository
     {
         Task<bool> Create(Models.Project project);
-        Task<Models.Project> Get(Models.Project project);
+        Task<Models.Project> GetSmall(Models.Project project);
+        Task<Models.Project> GetFull(Models.Project project);
+        Task<bool> Delete(Models.Project project);
+        Task<bool> Update(Models.Project project);
+        Task<List<Models.Project>> GetAll();
     }
 }

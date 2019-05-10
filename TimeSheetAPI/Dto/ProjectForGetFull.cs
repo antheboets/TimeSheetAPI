@@ -5,14 +5,16 @@ using System.Threading.Tasks;
 
 namespace TimeSheetAPI.Dto
 {
-    public class Project
+    public class ProjectForGetFull
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public ICollection<string> ActivitysId { get; set; }
-        public ICollection<string> UsersId { get; set; }
-        public ICollection<string> LogsId { get; set; }
+        public ICollection<Activity> Activitys { get; set; }
+        public ICollection<User> UsersOnTheProject { get; set; }
+        public ICollection<Log> Logs { get; set; }
         public string CompanyId { get; set; }
+        public Dto.Company Company { get; set; }
+        public bool InProgress { get; set; }
         public bool Overtime { get; set; }
         public bool Billable { get; set; }
     }

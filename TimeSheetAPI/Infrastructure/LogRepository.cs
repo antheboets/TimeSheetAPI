@@ -40,12 +40,12 @@ namespace TimeSheetAPI.Infrastructure
         }
         public async Task<bool> Delete(Models.Log log)
         {
-            Models.Log ModelLog = await Get(log);
-            if (ModelLog == null)
+            log = await Get(log);
+            if (log == null)
             {
                 return false;
             }
-            TimeSheetContext.Remove(ModelLog);
+            TimeSheetContext.Remove(log);
             await TimeSheetContext.SaveChangesAsync();
             return true;
         }
@@ -67,8 +67,7 @@ namespace TimeSheetAPI.Infrastructure
             {
                 return null;
             }
-            log = await TimeSheetContext.Log.Where(x => x.Id == log.Id && x.UserId == log.UserId).SingleOrDefaultAsync();
-            return log;
+            return await TimeSheetContext.Log.Where(x => x.Id == log.Id && x.UserId == log.UserId).SingleOrDefaultAsync();
         }
         public async Task<List<Log>> GetAll()
         {

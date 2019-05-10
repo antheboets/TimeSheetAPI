@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace TimeSheetAPI.Dto
 {
-    public class Test
+    public class Company
     {
-        public string Testval { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
     }
 }
