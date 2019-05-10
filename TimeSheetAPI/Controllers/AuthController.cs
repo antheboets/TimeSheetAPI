@@ -22,8 +22,8 @@ namespace TimeSheetAPI.Controllers
         private readonly IConfiguration Config;
         public AuthController(IAuthRepository repo, IConfiguration config)
         {
-            Repo = repo;
-            Config = config;
+            this.Repo = repo;
+            this.Config = config;
         }
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] Dto.UserForRegister user)
@@ -68,13 +68,19 @@ namespace TimeSheetAPI.Controllers
             return Ok(new { token = tokenHandler.WriteToken(token) });
         }
         [HttpPost("NewPass")]
-        public async Task<ActionResult> ChangePassword([FromBody] Dto.AuthNewPass authNewPass)
+        public async Task<Dto.Success> ChangePassword([FromBody] Dto.AuthNewPass authNewPass)
         {
-
             Dto.UserId userId = new UserId { Id = User.FindFirst(ClaimTypes.NameIdentifier).Value };
-
-            await Repo.ChangePassword(userId, authNewPass.NewPassword);
-            return Ok();
+            
+            if (authNewPass == null)
+            {
+                return new Success { Success = false };
+            }
+            if (await Repo.ChangePassword(userId, authNewPass.NewPassword))
+            {
+                return new Success { Success = true };
+            }
+            return new Success { Success = true };
         }
         [HttpPost("CSVUser")]
         public async Task<ActionResult> CsvUser()
@@ -83,4 +89,5 @@ namespace TimeSheetAPI.Controllers
             return Ok();
         }
     }
+
 }
