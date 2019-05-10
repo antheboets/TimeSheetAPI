@@ -61,7 +61,7 @@ namespace TimeSheetAPI
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,TimeSheetContext timeSheetContext, Seed seeder)
         {
 
-            //app.UseCors("MyPolicy");
+            app.UseCors("MyPolicy");
             timeSheetContext.Database.Migrate();
             if (env.IsDevelopment())
             {

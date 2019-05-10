@@ -19,5 +19,6 @@ namespace TimeSheetAPI.Models
         public DefaultWorkweek DefaultWorkweek { get; set; }
         public ICollection<WorkDayException> ExceptionWorkDays { get; set; }
         public ICollection<Log> Logs { get; set; }
+        public bool ChangeHistory { get; set; }
     }
 }

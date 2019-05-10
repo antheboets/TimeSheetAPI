@@ -4,52 +4,60 @@
     "Name": "test",
     "Email": "test@test.com",
     "RoleId": "5286f545-46df-4ccc-945d-515de9ebe516",
-    "DefaultWorkweekId": "0b94f947-a598-4ce9-afa6-c2ab6c28d515"
+    "DefaultWorkweekId": "0b94f947-a598-4ce9-afa6-c2ab6c28d515",
+    "ChangeHistory" : "False"
   },
   {
     "Id": "ce68bdb9-c5f0-440a-a403-c3a53791590f",
     "Name": "Coby",
     "Email": "co@test.com",
     "RoleId": "5286f545-46df-4ccc-945d-515de9ebe516",
-    "DefaultWorkweekId": "101f2004-f78d-42ae-ad26-eb61841eed42"
+    "DefaultWorkweekId": "101f2004-f78d-42ae-ad26-eb61841eed42",
+    "ChangeHistory": "False"
   },
   {
     "Id": "d97f95f4-fd95-48c8-9f61-26aa70573cff",
     "Name": "Coco",
     "Email": "co1@test.com",
     "RoleId": "5286f545-46df-4ccc-945d-515de9ebe516",
-    "DefaultWorkweekId": "15aea14d-df8d-4c79-99bb-9f1e6bc54c13"
+    "DefaultWorkweekId": "15aea14d-df8d-4c79-99bb-9f1e6bc54c13",
+    "ChangeHistory": "False"
   },
   {
     "Id": "e038d94c-a638-49a3-ba05-53351b160726",
     "Name": "Colette",
     "Email": "co2@test.com",
     "RoleId": "5286f545-46df-4ccc-945d-515de9ebe516",
-    "DefaultWorkweekId": "3795f1b5-a0d9-4c15-be1d-63d3fea321c3"
+    "DefaultWorkweekId": "3795f1b5-a0d9-4c15-be1d-63d3fea321c3",
+    "ChangeHistory": "False"
   },
   {
     "Id": "fa4cfd6e-0915-4576-8b9d-a0fd8b0402af",
     "Name": "Colinda",
     "Email": "co3@test.com",
     "RoleId": "5286f545-46df-4ccc-945d-515de9ebe516",
-    "DefaultWorkweekId": "6c461b35-8839-4e2f-a631-512ba4dd152d"
+    "DefaultWorkweekId": "6c461b35-8839-4e2f-a631-512ba4dd152d",
+    "ChangeHistory": "False"
   },
   {
     "Id": "106e0206-4f15-4d19-9eff-2017bf38decf",
     "Name": "Mark",
     "Email": "ma@test.com",
-    "RoleId": "b3ada5b4-b70c-4045-b97b-99b95a108e38"
+    "RoleId": "b3ada5b4-b70c-4045-b97b-99b95a108e38",
+    "ChangeHistory": "False"
   },
   {
     "Id": "93d70ede-30e6-40f4-9897-16a77d891283",
     "Name": "Mai",
     "Email": "ma1@test.com",
-    "RoleId": "b3ada5b4-b70c-4045-b97b-99b95a108e38"
+    "RoleId": "b3ada5b4-b70c-4045-b97b-99b95a108e38",
+    "ChangeHistory": "False"
   },
   {
     "Id": "10946e7d-bfed-40c9-94b1-b111745e01ec",
     "Name": "Hrdaya",
     "Email": "hr@test.com",
-    "RoleId": "e6f9ebdb-216d-4273-b663-56a5198d114e"
+    "RoleId": "e6f9ebdb-216d-4273-b663-56a5198d114e",
+    "ChangeHistory": "False"
   }
 ]

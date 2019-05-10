@@ -165,6 +165,8 @@ namespace TimeSheetAPI.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("ChangeHistory");
+
                     b.Property<string>("DefaultWorkweekId");
 
                     b.Property<string>("Email");
