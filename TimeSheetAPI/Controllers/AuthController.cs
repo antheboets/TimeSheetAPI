@@ -74,13 +74,13 @@ namespace TimeSheetAPI.Controllers
             
             if (authNewPass == null)
             {
-                return new Success { Succes = false };
+                return new Success { Success = false };
             }
             if (await Repo.ChangePassword(userId, authNewPass.NewPassword))
             {
-                return new Success { Succes = true };
+                return new Success { Success = true };
             }
-            return new Success { Succes = true };
+            return new Success { Success = true };
         }
         [HttpPost("CSVUser")]
         public async Task<ActionResult> CsvUser()
