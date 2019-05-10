@@ -86,7 +86,19 @@ namespace TimeSheetAPI.Infrastructure
             }
             return await TimeSheetContext.Log.Where(x => x.UserId == userId).ToListAsync();
         }
-
+        public async Task<List<Models.Log>> GetDay(DateTime day, string userId)
+        {
+            if (day == null)
+            {
+                day = DateTime.Now;
+            }
+            List<Models.Log> list = await TimeSheetContext.Log.Where(x => x.Start.Day == day.Day && x.Stop.Day == day.Day).ToListAsync();
+            if ( list == null)
+            {
+                return null;
+            }
+            return list;
+        }
         public async Task<List<Log>> GetDynamicScroll(int page)
         {
             return await TimeSheetContext.Log.Skip(page * 20).Take((page + 1) * 20).OrderBy(x => x.Start).ToListAsync(); ;

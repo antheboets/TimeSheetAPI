@@ -18,5 +18,6 @@ namespace TimeSheetAPI.Infrastructure
         Task<List<Models.Log>> GetWeek(DateTime WeekStart, DateTime WeekStop, string userId);
         Task<List<Models.Log>> GetAllOfUser(string userId);
         Task<List<Models.Log>> GetDynamicScroll(int page);
+        Task<List<Models.Log>> GetDay(DateTime Day, string userId);
     }
 }

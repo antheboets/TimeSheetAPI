@@ -125,7 +125,7 @@ namespace TimeSheetAPI.Controllers
             List<Models.User> userIds = new List<Models.User>();
             foreach (string user in project.UserId)
             {
-                userIds.Add(new Models.User { Id = });
+                userIds.Add(new Models.User { Id = user});
             }
             Models.Project ModelProject = new Models.Project { Id= project.Id, Name = project.Name, CompanyId=project.CompanyId, Activitys = activities, Billable=project.Billable, Overtime=project.Overtime, InProgress=project.InProgress, UsersOnTheProject= userIds};
             if (await Repo.Update(ModelProject))
@@ -151,6 +151,7 @@ namespace TimeSheetAPI.Controllers
         [HttpGet("GetList")]
         public async Task<ICollection<Dto.ProjectWithoutLogs>> GetList()
         {
+
             var Project = await TimeSheetContext.Project.ToListAsync();
             List<Dto.ProjectWithoutLogs> projects = new List<ProjectWithoutLogs>();
             foreach (var item in Project)
