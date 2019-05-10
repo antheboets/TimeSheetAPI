@@ -7,6 +7,6 @@ namespace TimeSheetAPI.Dto
 {
     public class Success
     {
-        public bool Success { get; set; }
+        public bool SuccessState { get; set; }
     }
 }
