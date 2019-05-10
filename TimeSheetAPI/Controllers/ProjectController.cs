@@ -149,14 +149,33 @@ namespace TimeSheetAPI.Controllers
             return BadRequest();
         }
         [HttpGet("GetList")]
-        public async Task<ICollection<Dto.ProjectWithoutLogs>> GetList()
+        public async Task<ICollection<Dto.ProjectForGetSmall>> GetList()
         {
-
-            var Project = await TimeSheetContext.Project.ToListAsync();
-            List<Dto.ProjectWithoutLogs> projects = new List<ProjectWithoutLogs>();
-            foreach (var item in Project)
+            List<Models.Project> projectModel = await Repo.GetAllOfUser(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if (projectModel == null)
             {
-                projects.Add(new ProjectWithoutLogs { Id = item.Id, Name = item.Name, CompanyId = item.CompanyId, Billable = item.Billable, Overtime = item.Overtime });
+                BadRequest();
+            }
+            
+            List<Dto.ProjectForGetSmall> projects = new List<ProjectForGetSmall>();
+            foreach (var item in projectModel)
+            {
+                List<string> logIds = new List<string>();
+                foreach (Models.Log log in item.Logs)
+                {
+                    logIds.Add(log.Id);
+                }
+                List<string> activitieIds = new List<string>();
+                foreach (Models.Activity activity in item.Activitys)
+                {
+                    activitieIds.Add(activity.Id);
+                }
+                List<string> userIds = new List<string>();
+                foreach (Models.User user in item.UsersOnTheProject)
+                {
+                    userIds.Add(user.Id);
+                }
+                projects.Add(new ProjectForGetSmall { Id = item.Id, Name = item.Name, CompanyId = item.CompanyId, Billable = item.Billable, Overtime = item.Overtime, InProgress=item.InProgress, ActivitysId=activitieIds, UsersId= userIds, LogsId=logIds });
             }
             return projects;
         }

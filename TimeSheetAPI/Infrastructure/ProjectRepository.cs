@@ -96,9 +96,40 @@ namespace TimeSheetAPI.Infrastructure
             return true;
         }
 
-        public Task<List<Project>> GetAll()
+        public async Task<List<Models.Project>> GetAll()
         {
-            throw new NotImplementedException();
+            return await TimeSheetContext.Project.ToListAsync();
+        }
+        public async Task<List<Models.Project>> GetAllOfUser(string userId)
+        {
+            if (userId == null)
+            {
+                return null;
+            }
+            if (userId == "")
+            {
+                return null;
+            }
+            List<Models.Project> list = await TimeSheetContext.Project.Include(x => x.UsersOnTheProject).Where(x => x.InProgress == true).ToListAsync();
+            //TODO Replace with linq
+            List<Models.Project> projectsList = new List<Models.Project>();
+            bool containsUser;
+            foreach (Models.Project project in list)
+            {
+                containsUser = false;
+                foreach (Models.User user in project.UsersOnTheProject)
+                {
+                    if (user.Id == userId)
+                    {
+                        containsUser = true;
+                    }
+                }
+                if (containsUser)
+                {
+                    projectsList.Add(project);
+                }
+            }
+            return projectsList;
         }
     }
 }

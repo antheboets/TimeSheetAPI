@@ -13,5 +13,6 @@ namespace TimeSheetAPI.Infrastructure
         Task<bool> Delete(Models.Project project);
         Task<bool> Update(Models.Project project);
         Task<List<Models.Project>> GetAll();
+        Task<List<Models.Project>> GetAllOfUser(string userId);
     }
 }
