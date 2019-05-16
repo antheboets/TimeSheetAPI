@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 
 namespace TimeSheetAPI.Dto
 {
-    public class UserForUpdate
+    public class UserForDelete
     {
         public string Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
-        public Models.Role Role { get; set; }
+        public string RoleId { get; set; }
+        public string DefaultWorkweekId { get; set; }
+        public bool ChangeHistory { get; set; }
     }
 }

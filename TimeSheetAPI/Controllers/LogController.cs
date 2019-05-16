@@ -23,7 +23,7 @@ namespace TimeSheetAPI.Controllers
             this.Repo = Repo;
         }
         [HttpPost("Create")]
-        public async Task<ActionResult> Create(Dto.LogForCreate log)
+        public async Task<ActionResult> Create([FromBody]Dto.LogForCreate log)
         {
             Models.Log ModelLog = new Models.Log { UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value, Start = log.Start, Stop = log.Stop, Description = log.Description, ProjectId  = log.ProjectId , ActivityId = log.ActivityId};
             if (await Repo.Create(ModelLog))
@@ -43,7 +43,7 @@ namespace TimeSheetAPI.Controllers
             return BadRequest();
         }
         [HttpPost("Update")]
-        public async Task<ActionResult> Update(Dto.LogForUpdate log)
+        public async Task<ActionResult> Update([FromBody]Dto.LogForUpdate log)
         {
             Models.Log ModelLog = new Models.Log { Id=log.Id, Start = log.Start, Stop = log.Stop, Description = log.Description, UserId = log.UserId ,ActivityId = log.ActivityId };
             if (await Repo.Update(ModelLog))

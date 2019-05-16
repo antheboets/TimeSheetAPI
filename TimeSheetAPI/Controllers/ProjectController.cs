@@ -26,7 +26,7 @@ namespace TimeSheetAPI.Controllers
             this.Config = Config;
         }
         [HttpPost("Create")]
-        public async Task<ActionResult> Create(Dto.ProjectForCreate Project)
+        public async Task<ActionResult> Create([FromBody]Dto.ProjectForCreate Project)
         {
             if (User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Manager").Value && User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Human-Resources").Value)
             {
@@ -45,7 +45,7 @@ namespace TimeSheetAPI.Controllers
             return BadRequest();
         }
         [HttpPost("GetFull")]
-        public async Task<Dto.ProjectForGetFull> GetFull(Dto.ProjectForGet Project)
+        public async Task<Dto.ProjectForGetFull> GetFull([FromBody]Dto.ProjectForGet Project)
         {
             if (Project == null)
             {
@@ -70,15 +70,15 @@ namespace TimeSheetAPI.Controllers
             {
                 activities.Add(new Activity { Id = activity.Id, Name= activity.Name});
             }
-            List<Dto.User> users = new List<User>();
+            List<Dto.UserForGet> users = new List<UserForGet>();
             foreach (Models.User user in projectModel.UsersOnTheProject)
             {
-                users.Add(new Dto.User { Id = user.Id, Name = user.Name, Role = user.Role,Email=user.Email});
+                users.Add(new Dto.UserForGet { Id = user.Id, Name = user.Name, RoleId = user.RoleId,Email=user.Email});
             }
             return new Dto.ProjectForGetFull { Id= projectModel.Id , Logs=logs, Activitys=activities, UsersOnTheProject = users, InProgress=projectModel.InProgress, Billable=projectModel.Billable, Overtime=projectModel.Overtime, Name=projectModel.Name, Company=new Company { Id= projectModel.Company.Id, Name=projectModel.Company.Name} };
         }
         [HttpPost("GetSmall")]
-        public async Task<Dto.ProjectForGetSmall> GetSmall(Dto.ProjectForGet Project)
+        public async Task<Dto.ProjectForGetSmall> GetSmall([FromBody]Dto.ProjectForGet Project)
         {
             if (Project == null)
             {
@@ -111,7 +111,7 @@ namespace TimeSheetAPI.Controllers
             return new Dto.ProjectForGetSmall { Id = projectModel.Id, LogsId = logIds, ActivitysId = activitieIds, UsersId = userIds, InProgress = projectModel.InProgress, Billable = projectModel.Billable, Overtime = projectModel.Overtime, Name = projectModel.Name, CompanyId =projectModel.Company.Id };
         }
         [HttpPost("Update")]
-        public async Task<ActionResult> Upadate(Dto.ProjectForUpdate project)
+        public async Task<ActionResult> Upadate([FromBody]Dto.ProjectForUpdate project)
         {
             if (User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Manager").Value && User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Human-Resources").Value)
             {
@@ -135,7 +135,7 @@ namespace TimeSheetAPI.Controllers
             return Ok();
         }
         [HttpPost("Delete")]
-        public async Task<ActionResult> Delete(Dto.ProjectForDelete project)
+        public async Task<ActionResult> Delete([FromBody]Dto.ProjectForDelete project)
         {
             if (User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Manager").Value && User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Human-Resources").Value)
             {

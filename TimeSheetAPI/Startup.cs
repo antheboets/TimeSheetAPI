@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using TimeSheetAPI.Infrastructure;
+using AutoMapper;
 
 namespace TimeSheetAPI
 {
@@ -34,6 +35,7 @@ namespace TimeSheetAPI
             string connectionString = Configuration.GetConnectionString("TimeSheetDatabase");
             services.AddDbContext<TimeSheetContext>(options => options.UseSqlServer(connectionString));
             services.AddCors();
+            services.AddAutoMapper();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<IUserRepository, UserRepository>();

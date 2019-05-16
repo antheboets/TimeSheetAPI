@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@ namespace TimeSheetAPI.Models
             this.Saturday = new WorkDay { Start = new DateTime(1, 1, 1, 9, 0, 0), Stop = new DateTime(1, 1, 1, 17, 0, 0) };
             this.Sunday = new WorkDay { Start = new DateTime(1, 1, 1, 9, 0, 0), Stop = new DateTime(1, 1, 1, 17, 0, 0) };
         }
+        [Key]
         public string Id { get; set; }
         public WorkDay Monday { get; set; }
         public WorkDay Tuesday { get; set; }

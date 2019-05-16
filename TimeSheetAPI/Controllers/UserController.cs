@@ -8,6 +8,8 @@ using TimeSheetAPI.Dto;
 using TimeSheetAPI.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
+using AutoMapper;
 
 namespace TimeSheetAPI.Controllers
 {
@@ -16,33 +18,33 @@ namespace TimeSheetAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        TimeSheetContext TimeSheetContext;
-        public UserController(TimeSheetContext TimeSheetContext)
+        private readonly IUserRepository Repo;
+        private readonly IConfiguration Config;
+        private readonly IMapper Mapper;
+
+        public UserController(IUserRepository Repo, IConfiguration Config, IMapper Mapper)
         {
-            this.TimeSheetContext = TimeSheetContext;
+            this.Repo = Repo;
+            this.Config = Config;
+            this.Mapper = Mapper;
         }
         [HttpPost("Get")]
-        public async Task<Dto.User> GetById([FromBody] Dto.User input)
+        public async Task<Dto.UserForGet> Get([FromBody] Dto.UserForGet UserId)
         {
-
-            if (input.Id == "")
+            if (UserId.Id == "")
             {
-                return new Dto.User();
+                BadRequest();
             }
-            Models.User User = await TimeSheetContext.User.Include(x => x.Logs).SingleAsync(x => x.Id == input.Id);
-            ICollection<string> LogsIds = new List<string>();
-            if (User != null)
+            Models.User user = new Models.User { Id = UserId.Id };
+            var userModel = Task.Run(() => Repo.Get(user));
+            var ExceptionDaysIds = Task.Run(() => Repo.GetListOfExceptionDays(user));
+            var LogsIds = Task.Run(() => Repo.GetListOfLogs(user));
+            await Task.WhenAll(userModel, ExceptionDaysIds, LogsIds);
+            if (userModel.Result == null)
             {
-                foreach (var log in User.Logs)
-                {
-                    LogsIds.Add(log.Id);
-                }
-                return new Dto.User { Id = User.Id, Name = User.Name, Email = User.Email, Logs = LogsIds };
+                BadRequest();
             }
-            else
-            {
-                return new Dto.User();
-            }
+            return new Dto.UserForGet { Id = userModel.Result.Id, Name = userModel.Result.Name, Email = userModel.Result.Email, LogIds = LogsIds.Result, ChangeHistory = userModel.Result.ChangeHistory, RoleId = userModel.Result.RoleId, DefaultWorkweekId = userModel.Result.DefaultWorkweekId, ExceptionWorkDayIds = ExceptionDaysIds.Result };
         }
         [HttpPost("Update")]
         public async Task<ActionResult> Update([FromBody]Dto.UserForUpdate userForUpdate)
@@ -50,29 +52,67 @@ namespace TimeSheetAPI.Controllers
             //var model = new User { Id = , Email=userForUpdate.Email, Name= userForUpdate.Name};
             if (User.FindFirst(ClaimTypes.NameIdentifier).Value != userForUpdate.Id)
             {
+                return Unauthorized();
+            }
+            if (userForUpdate == null)
+            {
                 return BadRequest();
             }
-            var model = new User { Id = userForUpdate.Id , Email = userForUpdate.Email, Name = userForUpdate.Name };
-            TimeSheetContext.Update(model);
-            await TimeSheetContext.SaveChangesAsync();
-            return Ok();
+            Models.User user = Mapper.Map<Models.User>(userForUpdate);
+            if (await Repo.Update(user))
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
         [AllowAnonymous]
         [HttpGet("test")]
-        public async Task<List<Dto.User>> Test()
+        public async Task<List<Dto.UserForGetFull>> Test()
         {
-            List<Models.User> User = await TimeSheetContext.User.Include(x => x.Role).Include(x => x.Logs).ToListAsync();
-            List<Dto.User> UserDtoList = new List<User>();
-            foreach (var user  in User)
+            return Mapper.Map<List<Dto.UserForGetFull>> (await Repo.GetAll());
+        }
+        //HR
+        [HttpGet("GetConsultants")]
+        public async Task<List<Dto.UserForGetHR>> GetConsultants()
+        {
+
+            if (User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Human-Resources").Value)
             {
-                List<string> logsIds = new List<string>(); 
-                foreach (var log in user.Logs)
-                {
-                    logsIds.Add(log.Id);
-                }
-                UserDtoList.Add(new Dto.User { Id = user.Id, Name = user.Name, Email = user.Email, Role = user.Role, Logs = logsIds });
+                Unauthorized();
             }
-            return UserDtoList;
+            var users = Task.Run(()=> Repo.GetAllConsultant());
+            var workMonths = Task.Run(() => Repo.GetAllWorkMonths());
+            await Task.WhenAll(users, workMonths);
+            List<Dto.UserForGetHR> userDto = new List<Dto.UserForGetHR>();
+            if (users.Result == null)
+            {
+                BadRequest();
+            }
+            foreach (Models.User user in users.Result)
+            {
+                Dto.UserForGetHR userForGetHR = Mapper.Map<Dto.UserForGetHR>(user);
+                Dto.WorkMonth workMonth = Mapper.Map<Dto.WorkMonth>(workMonths.Result.Where(x => x.UserId == user.Id));
+                workMonth.Salary = Repo.GetSalary(user);
+                workMonth.TotalHours = Repo.GetTotalTime(user);
+                userForGetHR.WorkMonth = workMonth;
+                userDto.Add(userForGetHR);
+            }
+            return userDto;
+        }
+        [HttpPost("UpdateWorkMonth")]
+        public async Task<ActionResult> UpdateUser(Dto.WorkMontForUpdate workMonth)
+        {
+            
+            if (workMonth == null)
+            {
+                return BadRequest();
+            }
+
+            if (await Repo.UpdateWorkMonth(Mapper.Map<Models.WorkMonth>(workMonth)))
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }

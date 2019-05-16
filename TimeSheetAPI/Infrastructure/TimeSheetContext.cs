@@ -19,6 +19,8 @@ namespace TimeSheetAPI.Infrastructure
         public DbSet<Role> Role { get; set; }
         public DbSet<DefaultWorkweek> DefaultWorkweek { get; set; }
         public DbSet<ProjectUser> ProjectUser { get; set; }
+        public DbSet<WorkMonth> WorkMonth { get; set; }
+        public DbSet<WorkDayException> WorkDayException { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProjectUser>().HasKey(o => new { o.ProjectId, o.UserId });

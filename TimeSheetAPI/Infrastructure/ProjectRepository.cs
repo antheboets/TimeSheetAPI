@@ -15,7 +15,7 @@ namespace TimeSheetAPI.Infrastructure
             this.TimeSheetContext = TimeSheetContext;
         }
 
-        public async Task<bool> Create(Project project)
+        public async Task<bool> Create(Models.Project project)
         {
             if (project == null)
             {
@@ -33,7 +33,7 @@ namespace TimeSheetAPI.Infrastructure
             return true;
         }
 
-        public async Task<Project> GetSmall(Project project)
+        public async Task<Project> GetSmall(Models.Project project)
         {
             if (project == null)
             {
@@ -49,7 +49,7 @@ namespace TimeSheetAPI.Infrastructure
             }
             return await TimeSheetContext.Project.Where(x => x.Id == project.Id).SingleOrDefaultAsync();
         }
-        public async Task<Project> GetFull(Project project)
+        public async Task<Project> GetFull(Models.Project project)
         {
             if (project == null)
             {
@@ -66,7 +66,7 @@ namespace TimeSheetAPI.Infrastructure
             return await TimeSheetContext.Project.Where(x => x.Id == project.Id).Include(x => x.UsersOnTheProject).ThenInclude(x => x.Role).Include(x => x.Logs).Include(x => x.Activitys).Include(x => x.Company).SingleOrDefaultAsync();
         }
 
-        public async Task<bool> Delete(Project project)
+        public async Task<bool> Delete(Models.Project project)
         {
             project = await GetSmall(project);
             if (project == null)
@@ -77,7 +77,7 @@ namespace TimeSheetAPI.Infrastructure
             await TimeSheetContext.SaveChangesAsync();
             return true;
         }
-        public async Task<bool> Update(Project project)
+        public async Task<bool> Update(Models.Project project)
         {
             if (project == null)
             {
