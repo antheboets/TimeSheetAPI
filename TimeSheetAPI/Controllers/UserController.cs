@@ -109,11 +109,23 @@ namespace TimeSheetAPI.Controllers
             }
             foreach (Models.User user in users.Result)
             {
-                Dto.UserForGetHR userForGetHR = Mapper.Map<Dto.UserForGetHR>(user);
-                Dto.WorkMonth workMonth = Mapper.Map<Dto.WorkMonth>(workMonths.Result.Where(x => x.UserId == user.Id));
-                workMonth.Salary = Repo.GetSalary(user);
-                workMonth.TotalHours = Repo.GetTotalTime(user);
-                userForGetHR.WorkMonth = workMonth;
+
+                Dto.UserForGetHR userForGetHR = new UserForGetHR { Id = user.Id, Email = user.Email, Name = user.Name, ChangeHistory = user.ChangeHistory };
+                //Mapper.Map<Dto.UserForGetHR>(user);
+                try
+                {
+                    Models.WorkMonth workMonthModel = workMonths.Result.Where(x => x.Id == user.Id).Single();
+                    Dto.WorkMonth workMonth = new WorkMonth { Id = workMonthModel.Id, Month = workMonthModel.Month, Accepted = workMonthModel.Accepted, UserId = workMonthModel.UserId };
+                    //Mapper.Map<Dto.WorkMonth>(workMonths.Result.Where(x => x.UserId == user.Id));
+                    workMonth.Salary = Repo.GetSalary(user);
+                    workMonth.TotalHours = Repo.GetTotalTime(user);
+                    userForGetHR.WorkMonth = workMonth;
+                    
+                }
+                catch (Exception e)
+                {
+
+                }
                 userDto.Add(userForGetHR);
             }
             return userDto;
@@ -133,5 +145,6 @@ namespace TimeSheetAPI.Controllers
             }
             return BadRequest();
         }
+        //logs
     }
 }

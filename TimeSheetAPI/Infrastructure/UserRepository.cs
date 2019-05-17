@@ -71,7 +71,7 @@ namespace TimeSheetAPI.Infrastructure
         }
         public async Task<List<Models.User>> GetAllConsultant()
         {
-            return await TimeSheetContext.User.Where(x=> x.RoleId == Config.GetSection("Role:Human-Resources").Value).Include(x => x.Logs).ToListAsync();
+            return await TimeSheetContext.User.Where(x=> x.RoleId == Config.GetSection("Role:Consultant").Value).Include(x => x.Logs).ToListAsync();
         }
         public async Task<List<WorkMonth>> GetAllWorkMonths()
         {

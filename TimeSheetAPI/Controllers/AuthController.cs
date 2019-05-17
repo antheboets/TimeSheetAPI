@@ -59,7 +59,7 @@ namespace TimeSheetAPI.Controllers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddDays(365),
                 SigningCredentials = creds
             };
 
