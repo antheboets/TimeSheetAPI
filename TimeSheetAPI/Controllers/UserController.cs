@@ -33,7 +33,7 @@ namespace TimeSheetAPI.Controllers
         {
             if (UserId.Id == "")
             {
-                BadRequest();
+                return null;
             }
             Models.User user = new Models.User { Id = UserId.Id };
             var userModel = Task.Run(() => Repo.Get(user));
@@ -42,9 +42,28 @@ namespace TimeSheetAPI.Controllers
             await Task.WhenAll(userModel, ExceptionDaysIds, LogsIds);
             if (userModel.Result == null)
             {
-                BadRequest();
+                return null;
             }
-            return new Dto.UserForGet { Id = userModel.Result.Id, Name = userModel.Result.Name, Email = userModel.Result.Email, LogIds = LogsIds.Result, ChangeHistory = userModel.Result.ChangeHistory, RoleId = userModel.Result.RoleId, DefaultWorkweekId = userModel.Result.DefaultWorkweekId, ExceptionWorkDayIds = ExceptionDaysIds.Result };
+            Dto.UserForGet userForGet = new Dto.UserForGet { Id= userModel.Result.Id , Name= userModel.Result.Name, ChangeHistory= userModel.Result .ChangeHistory, Email= userModel.Result .Email, DefaultWorkweekId= userModel.Result .DefaultWorkweekId, RoleId= userModel.Result .RoleId, ExceptionWorkDayIds= ExceptionDaysIds.Result, LogIds=LogsIds.Result};
+            //Mapper.Map<Dto.UserForGet>(userModel.Result);
+            if (userForGet == null)
+            {
+                return null;
+            }
+            if (userForGet.Id == "")
+            {
+                return null;
+            }
+            //return new Dto.UserForGet { Id = userModel.Result.Id, Name = userModel.Result.Name, Email = userModel.Result.Email, LogIds = LogsIds.Result, ChangeHistory = userModel.Result.ChangeHistory, RoleId = userModel.Result.RoleId, DefaultWorkweekId = userModel.Result.DefaultWorkweekId, ExceptionWorkDayIds = ExceptionDaysIds.Result };
+            if (ExceptionDaysIds.Result != null)
+            {
+                userForGet.ExceptionWorkDayIds = ExceptionDaysIds.Result;
+            }
+            if (LogsIds.Result != null)
+            {
+                userForGet.LogIds = LogsIds.Result;
+            }
+            return userForGet;
         }
         [HttpPost("Update")]
         public async Task<ActionResult> Update([FromBody]Dto.UserForUpdate userForUpdate)

@@ -51,7 +51,14 @@ namespace TimeSheetAPI.Infrastructure
             {
                 return null;
             }
-            user = await TimeSheetContext.User.Where(x => x.Id == user.Id).SingleOrDefaultAsync();
+            try
+            {
+                user = await TimeSheetContext.User.Where(x => x.Id == user.Id).SingleOrDefaultAsync();
+            }
+            catch (InvalidOperationException e)
+            {
+                return null;
+            }
             if (user == null)
             {
                 return null;
