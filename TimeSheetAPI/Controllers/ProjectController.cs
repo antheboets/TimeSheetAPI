@@ -160,28 +160,48 @@ namespace TimeSheetAPI.Controllers
             {
                 BadRequest();
             }
-
-            List<Dto.ProjectForGetSmall> projects = new List<ProjectForGetSmall>();
-            foreach (var item in projectModel)
+            List<Dto.ProjectForGetSmall> projectsDto = new List<ProjectForGetSmall>();
+            foreach (var project in projectModel)
             {
-                List<string> logIds = new List<string>();
-                foreach (Models.Log log in item.Logs)
-                {
-                    logIds.Add(log.Id);
-                }
-                List<string> activitieIds = new List<string>();
-                foreach (Models.Activity activity in item.Activitys)
-                {
-                    activitieIds.Add(activity.Id);
-                }
+                List<string> activityIds = new List<string>();
+                List<string> logsIds = new List<string>();
                 List<string> userIds = new List<string>();
-                foreach (Models.User user in item.UsersOnTheProject)
+
+                if (project.Activitys != null)
                 {
-                    userIds.Add(user.Id);
+                    foreach (var activity in project.Activitys)
+                    {
+                        activityIds.Add(activity.Id);
+                    }
                 }
-                projects.Add(new ProjectForGetSmall { Id = item.Id, Name = item.Name, CompanyId = item.CompanyId, Billable = item.Billable, Overtime = item.Overtime, InProgress = item.InProgress, ActivitysId = activitieIds, UsersId = userIds, LogsId = logIds });
-            }
-            return projects;
+
+                if (project.Logs != null)
+                {
+                    foreach (var log in project.Logs)
+                    {
+                        logsIds.Add(log.Id);
+                    }
+                }
+
+                if (project.UsersOnTheProject != null)
+                {
+                    foreach (var user in project.UsersOnTheProject)
+                    {
+                        userIds.Add(user.Id);
+                    }
+                }
+                Dto.ProjectForGetSmall projectForGetSmall = new Dto.ProjectForGetSmall { Id = project.Id, Billable = project.Billable, InProgress = project.InProgress, Name = project.Name, Overtime = project.Overtime, CompanyId = project.CompanyId };
+                //Mapper.Map<Dto.ProjectForGetSmall>(project);
+                projectForGetSmall.UsersId = userIds;
+                projectForGetSmall.ActivitysId = activityIds;
+                projectForGetSmall.LogsId = logsIds;
+                projectsDto.Add(projectForGetSmall);
+        }
+
+            //return Mapper.Map<List<Dto.ProjectForGetSmall>>(projects);
+        return projectsDto;
+        
+         
         }
         [AllowAnonymous]
         [HttpGet("Test")]
