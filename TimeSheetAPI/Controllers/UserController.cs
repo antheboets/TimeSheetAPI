@@ -44,7 +44,8 @@ namespace TimeSheetAPI.Controllers
             {
                 return null;
             }
-            Dto.UserForGet userForGet = Mapper.Map<Dto.UserForGet>(userModel.Result);
+            Dto.UserForGet userForGet = new Dto.UserForGet { Id= userModel.Result.Id , Name= userModel.Result.Name, ChangeHistory= userModel.Result .ChangeHistory, Email= userModel.Result .Email, DefaultWorkweekId= userModel.Result .DefaultWorkweekId, RoleId= userModel.Result .RoleId, ExceptionWorkDayIds= ExceptionDaysIds.Result, LogIds=LogsIds.Result};
+            //Mapper.Map<Dto.UserForGet>(userModel.Result);
             if (userForGet == null)
             {
                 return null;
