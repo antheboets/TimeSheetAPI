@@ -113,9 +113,10 @@ namespace TimeSheetAPI.Infrastructure
             List<Models.Project> list = await TimeSheetContext.Project.Include(x => x.UsersOnTheProject).Where(x => x.InProgress == true).ToListAsync();
             //TODO Replace with linq
             List<Models.Project> projectsList = new List<Models.Project>();
-            bool containsUser;
+            //bool containsUser;
             foreach (Models.Project project in list)
             {
+                /*
                 containsUser = false;
                 foreach (Models.User user in project.UsersOnTheProject)
                 {
@@ -128,6 +129,8 @@ namespace TimeSheetAPI.Infrastructure
                 {
                     projectsList.Add(project);
                 }
+                */
+                projectsList.Add(project);
             }
             return projectsList;
         }

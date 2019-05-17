@@ -156,9 +156,9 @@ namespace TimeSheetAPI.Controllers
         public async Task<ICollection<Dto.ProjectForGetSmall>> GetList()
         {
             List<Models.Project> projectModel = await Repo.GetAllOfUser(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            if (projectModel == null)
+            if (projectModel.Count == 0)
             {
-                BadRequest();
+                return null;
             }
             List<Dto.ProjectForGetSmall> projectsDto = new List<ProjectForGetSmall>();
             foreach (var project in projectModel)
