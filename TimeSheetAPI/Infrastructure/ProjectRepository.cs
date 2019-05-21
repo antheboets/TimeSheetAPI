@@ -21,10 +21,10 @@ namespace TimeSheetAPI.Infrastructure
             {
                 return false;
             }
-            if (project.Company == null) {
+            if (project.CompanyId == null) {
                 return false;
             }
-            if (project.Company == null)
+            if (project.CompanyId == "")
             {
                 return false;
             }

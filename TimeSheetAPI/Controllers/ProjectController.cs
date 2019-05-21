@@ -32,7 +32,7 @@ namespace TimeSheetAPI.Controllers
         [HttpPost("Create")]
         public async Task<ActionResult> Create([FromBody]Dto.ProjectForCreate Project)
         {
-            if (User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Manager").Value && User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Human-Resources").Value)
+            if (User.FindFirst(ClaimTypes.Role).Value == Config.GetSection("Role:Consultant:Name").Value)
             {
                 return Unauthorized();
             }
