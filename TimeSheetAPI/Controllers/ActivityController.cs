@@ -14,11 +14,11 @@ namespace TimeSheetAPI.Controllers
     [Authorize]
     [Route("[controller]")]
     [ApiController]
-    public class ActivitiesController : ControllerBase
+    public class ActivityController : ControllerBase
     {
         private readonly TimeSheetContext Repo;
 
-        public ActivitiesController(TimeSheetContext Repo)
+        public ActivityController(TimeSheetContext Repo)
         {
             this.Repo = Repo;
         }
