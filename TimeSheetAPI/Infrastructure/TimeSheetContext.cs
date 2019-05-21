@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TimeSheetAPI.Infrastructure
 {
+    
     public class TimeSheetContext : DbContext
     {
         public TimeSheetContext(DbContextOptions<TimeSheetContext> options) : base(options) { }
@@ -21,11 +22,11 @@ namespace TimeSheetAPI.Infrastructure
         public DbSet<ProjectUser> ProjectUser { get; set; }
         public DbSet<WorkMonth> WorkMonth { get; set; }
         public DbSet<WorkDayException> WorkDayException { get; set; }
+       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProjectUser>().HasKey(o => new { o.ProjectId, o.UserId });
             //modelBuilder.Entity<Project>().HasOptional(a => a.Logs).WithOptionalDependent().WillCascadeOnDelete(true);
-
-        }
+        } 
     }
 }

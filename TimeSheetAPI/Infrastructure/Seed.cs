@@ -114,14 +114,18 @@ namespace TimeSheetAPI.Infrastructure
         }
         public void SeedAll()
         {
+            
             SeedCompany();
             SeedRole();
             SeedDefaultWorkweek();
             SeedUser();
+            
             SeedProject();
             SeedProjectUsers();
+            
             SeedActivity();
             SeedLog();
+            
         }
     }
 }

@@ -36,15 +36,42 @@ namespace TimeSheetAPI.Controllers
             {
                 return Unauthorized();
             }
+            bool hasUsers = false;
+            if (Project == null)
+            {
+                return BadRequest();
+            }
+            if (Project.UsersOnTheProject == null)
+            {
+                return BadRequest();
+            }
+            if (Project.UsersOnTheProject.Count > 0)
+            {
+                hasUsers = true;
+            }
             List<Models.User> users = new List<Models.User>();
             foreach (Dto.UserId user in Project.UsersOnTheProject)
             {
                 users.Add(new Models.User { Id = user.Id });
             }
-            Models.Project ModelProject = new Models.Project { Name = Project.Name, CompanyId = Project.CompanyId, InProgress = Project.InProgress, Billable = Project.Billable, Overtime = Project.Overtime, UsersOnTheProject = users };
+            Models.Project ModelProject = new Models.Project { Name = Project.Name, CompanyId = Project.CompanyId, InProgress = Project.InProgress, Billable = Project.Billable, Overtime = Project.Overtime };
             if (await Repo.Create(ModelProject))
             {
-                return StatusCode(201);
+                if (hasUsers)
+                {
+                    if (await Repo.AddUserToProject(ModelProject, users))
+                    {
+                        return StatusCode(201);
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
+                }
+                else
+                {
+                    return StatusCode(201);
+                }
             }
             return BadRequest();
         }
@@ -75,9 +102,9 @@ namespace TimeSheetAPI.Controllers
                 activities.Add(new Activity { Id = activity.Id, Name = activity.Name });
             }
             List<Dto.UserForGet> users = new List<UserForGet>();
-            foreach (Models.User user in projectModel.UsersOnTheProject)
+            foreach (Models.ProjectUser projectUser in projectModel.Users)
             {
-                users.Add(new Dto.UserForGet { Id = user.Id, Name = user.Name, RoleId = user.RoleId, Email = user.Email });
+                users.Add(new Dto.UserForGet { Id = projectUser.User.Id, Name = projectUser.User.Name, RoleId = projectUser.User.RoleId, Email = projectUser.User.Email });
             }
             return new Dto.ProjectForGetFull { Id = projectModel.Id, Logs = logs, Activitys = activities, UsersOnTheProject = users, InProgress = projectModel.InProgress, Billable = projectModel.Billable, Overtime = projectModel.Overtime, Name = projectModel.Name, Company = new Company { Id = projectModel.Company.Id, Name = projectModel.Company.Name } };
         }
@@ -108,16 +135,16 @@ namespace TimeSheetAPI.Controllers
                 activitieIds.Add(activity.Id);
             }
             List<string> userIds = new List<string>();
-            foreach (Models.User user in projectModel.UsersOnTheProject)
+            foreach (Models.ProjectUser user in projectModel.Users)
             {
-                userIds.Add(user.Id);
+                userIds.Add(user.UserId);
             }
             return new Dto.ProjectForGetSmall { Id = projectModel.Id, LogsId = logIds, ActivitysId = activitieIds, UsersId = userIds, InProgress = projectModel.InProgress, Billable = projectModel.Billable, Overtime = projectModel.Overtime, Name = projectModel.Name, CompanyId = projectModel.Company.Id };
         }
         [HttpPost("Update")]
         public async Task<ActionResult> Upadate([FromBody]Dto.ProjectForUpdate project)
         {
-            if (User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Manager").Value && User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Human-Resources").Value)
+            if (User.FindFirst(ClaimTypes.Role).Value == Config.GetSection("Role:Consultant:Name").Value)
             {
                 return Unauthorized();
             }
@@ -131,7 +158,7 @@ namespace TimeSheetAPI.Controllers
             {
                 userIds.Add(new Models.User { Id = user });
             }
-            Models.Project ModelProject = new Models.Project { Id = project.Id, Name = project.Name, CompanyId = project.CompanyId, Activitys = activities, Billable = project.Billable, Overtime = project.Overtime, InProgress = project.InProgress, UsersOnTheProject = userIds };
+            Models.Project ModelProject = new Models.Project { Id = project.Id, Name = project.Name, CompanyId = project.CompanyId, Activitys = activities, Billable = project.Billable, Overtime = project.Overtime, InProgress = project.InProgress };
             if (await Repo.Update(ModelProject))
             {
                 return BadRequest();
@@ -141,7 +168,7 @@ namespace TimeSheetAPI.Controllers
         [HttpPost("Delete")]
         public async Task<ActionResult> Delete([FromBody]Dto.ProjectForDelete project)
         {
-            if (User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Manager").Value && User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Human-Resources").Value)
+            if (User.FindFirst(ClaimTypes.Role).Value == Config.GetSection("Role:Consultant:Name").Value)
             {
                 return Unauthorized();
             }
@@ -183,11 +210,11 @@ namespace TimeSheetAPI.Controllers
                     }
                 }
 
-                if (project.UsersOnTheProject != null)
+                if (project.Users != null)
                 {
-                    foreach (var user in project.UsersOnTheProject)
+                    foreach (var user in project.Users)
                     {
-                        userIds.Add(user.Id);
+                        userIds.Add(user.UserId);
                     }
                 }
                 Dto.ProjectForGetSmall projectForGetSmall = new Dto.ProjectForGetSmall { Id = project.Id, Billable = project.Billable, InProgress = project.InProgress, Name = project.Name, Overtime = project.Overtime, CompanyId = project.CompanyId };
@@ -196,12 +223,63 @@ namespace TimeSheetAPI.Controllers
                 projectForGetSmall.ActivitysId = activityIds;
                 projectForGetSmall.LogsId = logsIds;
                 projectsDto.Add(projectForGetSmall);
-        }
-
+            }
             //return Mapper.Map<List<Dto.ProjectForGetSmall>>(projects);
-        return projectsDto;
-        
-         
+            return projectsDto;
+        }
+        [HttpPost("RemoveUser")]
+        public async Task<ActionResult> RemoveUser(Dto.ProjectForUserList projectForUserList)
+        {
+            if (User.FindFirst(ClaimTypes.Role).Value == Config.GetSection("Role:Consultant:Name").Value)
+            {
+                return Unauthorized();
+            }
+            if (projectForUserList == null)
+            {
+                return BadRequest();
+            }
+            if (projectForUserList.UserIds == null)
+            {
+                return BadRequest();
+            }
+            List<Models.User> userList = new List<Models.User>();
+            foreach (Dto.UserId user in projectForUserList.UserIds)
+            {
+                userList.Add(new Models.User { Id = user.Id });
+            }
+            Models.Project project = new Models.Project { Id = projectForUserList.ProjectId };
+            if (await Repo.RemoveUsers(project, userList))
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+        [HttpPost("AddUser")]
+        public async Task<ActionResult> AddUser(Dto.ProjectForUserList projectForUserList)
+        {
+            if (User.FindFirst(ClaimTypes.Role).Value == Config.GetSection("Role:Consultant:Name").Value)
+            {
+                return Unauthorized();
+            }
+            if (projectForUserList == null)
+            {
+                return BadRequest();
+            }
+            if (projectForUserList.UserIds == null)
+            {
+                return BadRequest();
+            }
+            List<Models.User> userList = new List<Models.User>();
+            foreach (Dto.UserId user in projectForUserList.UserIds)
+            {
+                userList.Add(new Models.User {Id = user.Id});
+            }
+            Models.Project project = new Models.Project { Id = projectForUserList.ProjectId};
+            if (await Repo.AddUsers(project, userList))
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
         [AllowAnonymous]
         [HttpGet("Test")]
@@ -232,11 +310,11 @@ namespace TimeSheetAPI.Controllers
                     }
                 }
 
-                if (project.UsersOnTheProject != null)
+                if (project.Users != null)
                 {
-                    foreach (var user in project.UsersOnTheProject)
+                    foreach (var user in project.Users)
                     {
-                        userIds.Add(user.Id);
+                        userIds.Add(user.UserId);
                     }
                 }
                 Dto.ProjectForGetSmall projectForGetSmall = new Dto.ProjectForGetSmall { Id = project.Id, Billable = project.Billable, InProgress = project.InProgress, Name = project.Name, Overtime = project.Overtime, CompanyId = project.CompanyId };

@@ -14,5 +14,8 @@ namespace TimeSheetAPI.Infrastructure
         Task<bool> Update(Models.Project project);
         Task<List<Models.Project>> GetAll();
         Task<List<Models.Project>> GetAllOfUser(string userId);
+        Task<bool> AddUserToProject(Models.Project project, List<Models.User> users);
+        Task<bool> RemoveUsers(Models.Project project ,List<Models.User> users);
+        Task<bool> AddUsers(Models.Project project, List<Models.User> users);
     }
 }
