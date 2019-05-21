@@ -11,7 +11,8 @@ using TimeSheetAPI.Models;
 
 namespace TimeSheetAPI.Controllers
 {
-    [Route("controller")]
+    [Authorize]
+    [Route("[controller]")]
     [ApiController]
     public class ActivitiesController : ControllerBase
     {
@@ -23,7 +24,7 @@ namespace TimeSheetAPI.Controllers
         }
 
         // GET: api/Activities
-        [HttpGet]
+        [HttpGet("Test")]
         public async Task<ActionResult<IEnumerable<Activity>>> GetActivity()
         {
             return await Repo.Activity.ToListAsync();
@@ -44,7 +45,7 @@ namespace TimeSheetAPI.Controllers
         }
 
         // PUT: api/Activities/5
-        [HttpPost("")]
+        [HttpPost("Create")]
         public async Task<IActionResult> PutActivity(string id, Activity activity)
         {
             if (id != activity.Id)
@@ -74,7 +75,7 @@ namespace TimeSheetAPI.Controllers
         }
 
         // POST: api/Activities
-        [HttpPost]
+        [HttpPost("Update")]
         public async Task<ActionResult<Activity>> PostActivity(Activity activity)
         {
             Repo.Activity.Add(activity);
@@ -82,10 +83,14 @@ namespace TimeSheetAPI.Controllers
 
             return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
         }
-
+        [HttpGet]
+        public ActionResult Test2()
+        {
+            return Ok();
+        }
         // DELETE: api/Activities/5
-        [HttpDelete("Delete")]
-        public async Task<ActionResult<Activity>> DeleteActivity([FromBody] Dto.ActivityForDelete activityForDelete)
+        [HttpPost("Delete")]
+        public async Task<ActionResult<Activity>> Delete([FromBody] Dto.ActivityForDelete activityForDelete)
         {
             var activity = await Repo.Activity.FindAsync(activityForDelete.Id);
             if (activity == null)
