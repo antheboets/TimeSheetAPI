@@ -34,7 +34,7 @@ namespace TimeSheetAPI.Controllers
         {
             if (User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Manager").Value && User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Human-Resources").Value)
             {
-                Unauthorized();
+                return Unauthorized();
             }
             List<Models.User> users = new List<Models.User>();
             foreach (Dto.UserId user in Project.UsersOnTheProject)
@@ -53,16 +53,16 @@ namespace TimeSheetAPI.Controllers
         {
             if (Project == null)
             {
-                BadRequest();
+                return null;
             }
             if (Project.Id == "")
             {
-                BadRequest();
+                return null;
             }
             Models.Project projectModel = await Repo.GetFull(new Models.Project { Id = Project.Id });
             if (projectModel == null)
             {
-                BadRequest();
+                return null;
             }
             List<Dto.Log> logs = new List<Dto.Log>();
             foreach (Models.Log log in projectModel.Logs)
@@ -86,16 +86,16 @@ namespace TimeSheetAPI.Controllers
         {
             if (Project == null)
             {
-                BadRequest();
+                return null;
             }
             if (Project.Id == "")
             {
-                BadRequest();
+                return null;
             }
             Models.Project projectModel = await Repo.GetFull(new Models.Project { Id = Project.Id });
             if (projectModel == null)
             {
-                BadRequest();
+                return null;
             }
             List<string> logIds = new List<string>();
             foreach (Models.Log log in projectModel.Logs)
@@ -119,7 +119,7 @@ namespace TimeSheetAPI.Controllers
         {
             if (User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Manager").Value && User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Human-Resources").Value)
             {
-                Unauthorized();
+                return Unauthorized();
             }
             List<Models.Activity> activities = new List<Models.Activity>();
             foreach (Dto.Activity activity in project.Activitys)
@@ -143,7 +143,7 @@ namespace TimeSheetAPI.Controllers
         {
             if (User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Manager").Value && User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Human-Resources").Value)
             {
-                Unauthorized();
+                return Unauthorized();
             }
             Models.Project ModelProject = new Models.Project { Id = project.Id };
             if (await Repo.Delete(ModelProject))

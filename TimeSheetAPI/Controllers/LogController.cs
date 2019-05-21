@@ -8,6 +8,7 @@ using TimeSheetAPI.Dto;
 using TimeSheetAPI.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Net;
 
 namespace TimeSheetAPI.Controllers
 {
@@ -58,12 +59,12 @@ namespace TimeSheetAPI.Controllers
             Models.Log log = new Models.Log { Id = Id, UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value };
             if (log == null)
             {
-                BadRequest();
+                return null;
             }
             log = await Repo.Get(log);
             if (log == null)
             {
-                BadRequest();
+                return null;
             }
             return new Dto.Log { Id = log.Id, Start = log.Start, Stop = log.Stop, Description=log.Description, ActivityId = log.ActivityId, UserId = log.ActivityId, ProjectId = log.ProjectId };
         }
@@ -128,13 +129,6 @@ namespace TimeSheetAPI.Controllers
                 DtoLogs.Add(new Dto.Log { Id = log.Id, Start = log.Start, Stop = log.Stop, Description = log.Description, ActivityId = log.ActivityId, ProjectId = log.ProjectId, UserId = log.UserId });
             }
             return DtoLogs;
-        }
-        [HttpGet("test2")]
-        [AllowAnonymous]
-        public Models.Log Test()
-        {
-            BadRequest();
-            return new Models.Log { };
         }
     }
 }
