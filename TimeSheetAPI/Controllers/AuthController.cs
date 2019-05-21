@@ -11,9 +11,11 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TimeSheetAPI.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -25,6 +27,7 @@ namespace TimeSheetAPI.Controllers
             this.Repo = repo;
             this.Config = config;
         }
+        [AllowAnonymous]
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] Dto.UserForRegister user)
         {
@@ -38,6 +41,7 @@ namespace TimeSheetAPI.Controllers
 
             return StatusCode(201);
         }
+        [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] Dto.UserForLogin user)
         {

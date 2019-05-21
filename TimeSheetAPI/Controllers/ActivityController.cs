@@ -24,6 +24,7 @@ namespace TimeSheetAPI.Controllers
         }
 
         // GET: api/Activities
+        [AllowAnonymous]
         [HttpGet("Test")]
         public async Task<ActionResult<IEnumerable<Activity>>> GetActivity()
         {
