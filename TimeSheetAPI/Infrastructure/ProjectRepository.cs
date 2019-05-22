@@ -65,7 +65,12 @@ namespace TimeSheetAPI.Infrastructure
             {
                 return null;
             }
-            return await TimeSheetContext.Project.Where(x => x.Id == project.Id).Include(x => x.Users).Include(x => x.Logs).Include(x => x.Activitys).Include(x => x.Company).SingleOrDefaultAsync();
+            project = await TimeSheetContext.Project.Where(x => x.Id == project.Id).Include(x => x.Users).Include(x => x.Logs).Include(x => x.Activitys).Include(x => x.Company).SingleOrDefaultAsync();
+            foreach (Models.ProjectUser projectUser in project.Users)
+            {
+                projectUser.User = await TimeSheetContext.User.Where(x => x.Id == projectUser.UserId).SingleOrDefaultAsync();
+            }
+            return project;
         }
 
         public async Task<bool> Delete(Models.Project project)
