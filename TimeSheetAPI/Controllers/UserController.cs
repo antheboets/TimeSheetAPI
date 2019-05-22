@@ -145,6 +145,22 @@ namespace TimeSheetAPI.Controllers
             }
             return BadRequest();
         }
-        //logs
+        [HttpPost("GetDefaultWorkWeek")]
+        public async Task<Dto.DefaultWorkweek> GetDefaultWorkWeek([FromQuery]Dto.DefaultWorkweekId defaultWorkweekForGet)
+        {
+            if (defaultWorkweekForGet == null)
+            {
+                return null;
+            }
+            if (defaultWorkweekForGet.Id == null)
+            {
+                return null;
+            }
+            if (defaultWorkweekForGet.Id == "")
+            {
+                return null;
+            }
+            return await Repo.();
+        }
     }
 }

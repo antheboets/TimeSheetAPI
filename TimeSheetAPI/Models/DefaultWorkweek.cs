@@ -20,12 +20,12 @@ namespace TimeSheetAPI.Models
         }
         [Key]
         public string Id { get; set; }
-        public WorkDay Monday { get; set; }
-        public WorkDay Tuesday { get; set; }
-        public WorkDay Wednesday { get; set; }
-        public WorkDay Thursday { get; set; }
-        public WorkDay Friday { get; set; }
-        public WorkDay Saturday { get; set; }
-        public WorkDay Sunday { get; set; }
+        public virtual WorkDay Monday { get; set; }
+        public virtual WorkDay Tuesday { get; set; }
+        public virtual WorkDay Wednesday { get; set; }
+        public virtual WorkDay Thursday { get; set; }
+        public virtual WorkDay Friday { get; set; }
+        public virtual WorkDay Saturday { get; set; }
+        public virtual WorkDay Sunday { get; set; }
     }
 }
