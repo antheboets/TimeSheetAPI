@@ -54,6 +54,16 @@ namespace TimeSheetAPI.Infrastructure
             }
             timeSheetContext.SaveChanges();
         }
+        public void SeedWorkMonth()
+        {
+            var WorkMonthData = System.IO.File.ReadAllText("./SeedData/WorkMonthSeed.json");
+            List<WorkMonth> workMonths = JsonConvert.DeserializeObject<List<WorkMonth>>(WorkMonthData);
+            foreach (var workMonth in workMonths)
+            {
+                timeSheetContext.WorkMonth.Add(workMonth);
+            }
+            timeSheetContext.SaveChanges();
+        }
         private void CreatePasswordHash(string password, out Byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
@@ -118,6 +128,7 @@ namespace TimeSheetAPI.Infrastructure
             SeedRole();
             SeedDefaultWorkweek();
             SeedUser();
+            SeedWorkMonth();
             SeedProject();
             SeedProjectUsers();
             SeedActivity();
