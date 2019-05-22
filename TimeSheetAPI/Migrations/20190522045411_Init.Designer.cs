@@ -10,7 +10,7 @@ using TimeSheetAPI.Infrastructure;
 namespace TimeSheetAPI.Migrations
 {
     [DbContext(typeof(TimeSheetContext))]
-    [Migration("20190521235316_Init")]
+    [Migration("20190522045411_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
