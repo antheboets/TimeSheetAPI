@@ -104,7 +104,7 @@ namespace TimeSheetAPI.Controllers
             List<Dto.UserForGet> users = new List<UserForGet>();
             foreach (Models.ProjectUser projectUser in projectModel.Users)
             {
-                users.Add(new Dto.UserForGet { Id = projectUser.User.Id, Name = projectUser.User.Name, RoleId = projectUser.User.RoleId, Email = projectUser.User.Email });
+                users.Add(new Dto.UserForGet { Id = projectUser.User.Id, Name = projectUser.User.Name, RoleId = projectUser.User.RoleId, Email = projectUser.User.Email,ChangeHistory= projectUser.User.ChangeHistory });
             }
             return new Dto.ProjectForGetFull { Id = projectModel.Id, Logs = logs, Activitys = activities, UsersOnTheProject = users, InProgress = projectModel.InProgress, Billable = projectModel.Billable, Overtime = projectModel.Overtime, Name = projectModel.Name, Company = new Company { Id = projectModel.Company.Id, Name = projectModel.Company.Name } };
         }

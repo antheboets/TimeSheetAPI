@@ -17,7 +17,7 @@ namespace TimeSheetAPI.Infrastructure
         }
         public async Task<bool> Create (Models.Log log)
         {
-            if (IsValidLog(log))
+            if (!IsValidLog(log))
             {
                 return false;
             }
