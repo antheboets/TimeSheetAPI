@@ -195,5 +195,20 @@ namespace TimeSheetAPI.Controllers
             }
             return BadRequest();
         }
+        [HttpGet("GetAllEmails")]
+        public async Task<List<Dto.UserForEmail>> GetAllEmails()
+        {
+            if (User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Human-Resources").Value)
+            {
+                Unauthorized();
+            }
+            List<string> Emails =  await Repo.GetAllMails();
+            List<Dto.UserForEmail> userForEmails = new List<Dto.UserForEmail>();
+            foreach (string email in Emails)
+            {
+                userForEmails.Add(new UserForEmail {Email=email });
+            }
+            return userForEmails;
+        }
     }
 }

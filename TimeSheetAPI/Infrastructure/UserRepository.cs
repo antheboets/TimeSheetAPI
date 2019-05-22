@@ -71,7 +71,7 @@ namespace TimeSheetAPI.Infrastructure
         }
         public async Task<List<Models.User>> GetAllConsultant()
         {
-            return await TimeSheetContext.User.Where(x=> x.RoleId == Config.GetSection("Role:Consultant").Value).Include(x => x.Logs).ToListAsync();
+            return await TimeSheetContext.User.Where(x=> x.RoleId == Config.GetSection("Role:Consultant:Id").Value).Include(x => x.Logs).ToListAsync();
         }
         public async Task<List<WorkMonth>> GetAllWorkMonths()
         {
@@ -254,6 +254,16 @@ namespace TimeSheetAPI.Infrastructure
             }
             await TimeSheetContext.SaveChangesAsync();
             return true;
+        }
+        public async Task<List<string>> GetAllMails()
+        {
+            List<string> emails = new List<string>();
+            List<Models.User> users = await TimeSheetContext.User.Where(x => x.RoleId == Config.GetSection("Role:Consultant:Id").Value).ToListAsync();
+            foreach (Models.User user in users)
+            {
+                emails.Add(user.Email);
+            }
+            return emails;
         }
     }
 }

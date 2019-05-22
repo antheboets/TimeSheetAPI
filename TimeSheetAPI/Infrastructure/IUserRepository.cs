@@ -21,5 +21,6 @@ namespace TimeSheetAPI.Infrastructure
         Task<List<Models.WorkMonth>> GetAllWorkMonths();
         Task<Models.DefaultWorkweek> GetDefaultWorkweek(Models.DefaultWorkweek defaultWorkweek);
         Task<bool> UpdateDefaultWorkWeek(Models.DefaultWorkweek defaultWorkweek);
+        Task<List<string>> GetAllMails();
     }
 }
