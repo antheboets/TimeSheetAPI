@@ -36,15 +36,20 @@ namespace TimeSheetAPI.Controllers
                 return null;
             }
             Models.User user = new Models.User { Id = UserId.Id };
+            /*  
             var userModel = Task.Run(() => Repo.Get(user));
             var ExceptionDaysIds = Task.Run(() => Repo.GetListOfExceptionDays(user));
             var LogsIds = Task.Run(() => Repo.GetListOfLogs(user));
             await Task.WhenAll(userModel, ExceptionDaysIds, LogsIds);
-            if (userModel.Result == null)
+            */
+            var userModel = await Repo.Get(user);
+            var ExceptionDaysIds = await Repo.GetListOfExceptionDays(user);
+            var LogsIds = await Repo.GetListOfLogs(user);
+            if (userModel == null)
             {
                 return null;
             }
-            Dto.UserForGet userForGet = new Dto.UserForGet { Id= userModel.Result.Id , Name= userModel.Result.Name, ChangeHistory= userModel.Result .ChangeHistory, Email= userModel.Result .Email, DefaultWorkweekId= userModel.Result .DefaultWorkweekId, RoleId= userModel.Result .RoleId, ExceptionWorkDayIds= ExceptionDaysIds.Result, LogIds=LogsIds.Result};
+            Dto.UserForGet userForGet = new Dto.UserForGet { Id= userModel.Id , Name= userModel.Name, ChangeHistory= userModel.ChangeHistory, Email= userModel.Email, DefaultWorkweekId= userModel.DefaultWorkweekId, RoleId= userModel.RoleId, ExceptionWorkDayIds= ExceptionDaysIds, LogIds=LogsIds};
             //Mapper.Map<Dto.UserForGet>(userModel.Result);
             if (userForGet == null)
             {
@@ -55,13 +60,13 @@ namespace TimeSheetAPI.Controllers
                 return null;
             }
             //return new Dto.UserForGet { Id = userModel.Result.Id, Name = userModel.Result.Name, Email = userModel.Result.Email, LogIds = LogsIds.Result, ChangeHistory = userModel.Result.ChangeHistory, RoleId = userModel.Result.RoleId, DefaultWorkweekId = userModel.Result.DefaultWorkweekId, ExceptionWorkDayIds = ExceptionDaysIds.Result };
-            if (ExceptionDaysIds.Result != null)
+            if (ExceptionDaysIds != null)
             {
-                userForGet.ExceptionWorkDayIds = ExceptionDaysIds.Result;
+                userForGet.ExceptionWorkDayIds = ExceptionDaysIds;
             }
-            if (LogsIds.Result != null)
+            if (LogsIds != null)
             {
-                userForGet.LogIds = LogsIds.Result;
+                userForGet.LogIds = LogsIds;
             }
             return userForGet;
         }
@@ -160,7 +165,35 @@ namespace TimeSheetAPI.Controllers
             {
                 return null;
             }
-            return await Repo.Get;
+            Models.DefaultWorkweek defaultWorkweekModel = new Models.DefaultWorkweek { Id = defaultWorkweekForGet.Id };
+            defaultWorkweekModel = await Repo.GetDefaultWorkweek(defaultWorkweekModel);
+            if (defaultWorkweekModel == null)
+            {
+                return null;
+            }
+            return Mapper.Map <Dto.DefaultWorkweek>(defaultWorkweekModel);//new Dto.DefaultWorkweek { Id = defaultWorkweekModel.Id, Monday = defaultWorkweekModel.Monday};
+        }
+        [HttpPost("UpdateDefaultWorkWeek")]
+        public async Task<ActionResult> UpdateDefaultWorkWeek([FromBody]Dto.DefaultWorkweek defaultWorkweek)
+        {
+            if (defaultWorkweek == null)
+            {
+                return BadRequest();
+            }
+            if (defaultWorkweek.Id == null)
+            {
+                return BadRequest();
+            }
+            if (defaultWorkweek.Id == "")
+            {
+                return BadRequest();
+            }
+            Models.DefaultWorkweek defaultWorkweekModel = Mapper.Map<Models.DefaultWorkweek>(defaultWorkweek);
+            if (await Repo.UpdateDefaultWorkWeek(defaultWorkweekModel))
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }
