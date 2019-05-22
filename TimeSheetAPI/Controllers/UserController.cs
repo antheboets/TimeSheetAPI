@@ -123,7 +123,7 @@ namespace TimeSheetAPI.Controllers
                 //Mapper.Map<Dto.UserForGetHR>(user);
                 try
                 {
-                    Models.WorkMonth workMonthModel = workMonths.Where(x => x.Id == user.Id).Single();
+                    Models.WorkMonth workMonthModel = workMonths.Where(x => x.UserId == user.Id).SingleOrDefault();
                     Dto.WorkMonth workMonth = new WorkMonth { Id = workMonthModel.Id, Month = workMonthModel.Month, Accepted = workMonthModel.Accepted, UserId = workMonthModel.UserId };
                     //Mapper.Map<Dto.WorkMonth>(workMonths.Result.Where(x => x.UserId == user.Id));
                     workMonth.Salary = Repo.GetSalary(user);
