@@ -12992,23 +12992,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Anthe\\.nuget\\packages\\": {},
+    "C:\\Users\\Anthe Boets\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Anthe\\Source\\Repos\\TimeSheetAPI\\TimeSheetAPI\\TimeSheetAPI.csproj",
+      "projectUniqueName": "C:\\Users\\Anthe Boets\\source\\repos\\TimeSheetApi\\TimeSheetAPI\\TimeSheetAPI.csproj",
       "projectName": "TimeSheetAPI",
-      "projectPath": "C:\\Users\\Anthe\\Source\\Repos\\TimeSheetAPI\\TimeSheetAPI\\TimeSheetAPI.csproj",
-      "packagesPath": "C:\\Users\\Anthe\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Anthe\\Source\\Repos\\TimeSheetAPI\\TimeSheetAPI\\obj\\",
+      "projectPath": "C:\\Users\\Anthe Boets\\source\\repos\\TimeSheetApi\\TimeSheetAPI\\TimeSheetAPI.csproj",
+      "packagesPath": "C:\\Users\\Anthe Boets\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Anthe Boets\\source\\repos\\TimeSheetApi\\TimeSheetAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Anthe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Anthe Boets\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

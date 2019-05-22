@@ -104,22 +104,26 @@ namespace TimeSheetAPI.Controllers
             {
                 Unauthorized();
             }
+            /*
             var users = Task.Run(()=> Repo.GetAllConsultant());
             var workMonths = Task.Run(() => Repo.GetAllWorkMonths());
             await Task.WhenAll(users, workMonths);
+            */
+            var users = await Repo.GetAllConsultant();
+            var workMonths = await Repo.GetAllWorkMonths();
             List<Dto.UserForGetHR> userDto = new List<Dto.UserForGetHR>();
-            if (users.Result == null)
+            if (users == null)
             {
                 BadRequest();
             }
-            foreach (Models.User user in users.Result)
+            foreach (Models.User user in users)
             {
 
                 Dto.UserForGetHR userForGetHR = new UserForGetHR { Id = user.Id, Email = user.Email, Name = user.Name, ChangeHistory = user.ChangeHistory };
                 //Mapper.Map<Dto.UserForGetHR>(user);
                 try
                 {
-                    Models.WorkMonth workMonthModel = workMonths.Result.Where(x => x.Id == user.Id).Single();
+                    Models.WorkMonth workMonthModel = workMonths.Where(x => x.Id == user.Id).Single();
                     Dto.WorkMonth workMonth = new WorkMonth { Id = workMonthModel.Id, Month = workMonthModel.Month, Accepted = workMonthModel.Accepted, UserId = workMonthModel.UserId };
                     //Mapper.Map<Dto.WorkMonth>(workMonths.Result.Where(x => x.UserId == user.Id));
                     workMonth.Salary = Repo.GetSalary(user);
@@ -143,29 +147,25 @@ namespace TimeSheetAPI.Controllers
             {
                 return BadRequest();
             }
-
-            if (await Repo.UpdateWorkMonth(Mapper.Map<Models.WorkMonth>(workMonth)))
+            Models.WorkMonth workMonthModel = new Models.WorkMonth { Id = workMonth.Id, Accepted = workMonth.Accepted, Month = workMonth.Month, UserId = workMonth.UserId };
+            if (await Repo.UpdateWorkMonth(workMonthModel))
             {
                 return Ok();
             }
             return BadRequest();
         }
         [HttpPost("GetDefaultWorkWeek")]
-        public async Task<Dto.DefaultWorkweek> GetDefaultWorkWeek([FromQuery]Dto.DefaultWorkweekId defaultWorkweekForGet)
+        public async Task<Dto.DefaultWorkweek> GetDefaultWorkWeek([FromQuery] string Id)
         {
-            if (defaultWorkweekForGet == null)
+            if (Id == null)
             {
                 return null;
             }
-            if (defaultWorkweekForGet.Id == null)
+            if (Id == "")
             {
                 return null;
             }
-            if (defaultWorkweekForGet.Id == "")
-            {
-                return null;
-            }
-            Models.DefaultWorkweek defaultWorkweekModel = new Models.DefaultWorkweek { Id = defaultWorkweekForGet.Id };
+            Models.DefaultWorkweek defaultWorkweekModel = new Models.DefaultWorkweek { Id = Id };
             defaultWorkweekModel = await Repo.GetDefaultWorkweek(defaultWorkweekModel);
             if (defaultWorkweekModel == null)
             {

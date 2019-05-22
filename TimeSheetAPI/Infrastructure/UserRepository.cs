@@ -200,8 +200,20 @@ namespace TimeSheetAPI.Infrastructure
             {
                 return false;
             }
-            TimeSheetContext.Update(workMonth);
-            await TimeSheetContext.SaveChangesAsync();
+            try
+            {
+                Models.WorkMonth workMonthOld =  await TimeSheetContext.WorkMonth.Where(x => x.Id == workMonth.Id).SingleOrDefaultAsync();
+                workMonth.Month = workMonthOld.Month;
+                workMonth.UserId = workMonthOld.UserId;
+                TimeSheetContext.Entry(workMonthOld).State = EntityState.Detached;
+                workMonthOld = null;
+                TimeSheetContext.Update(workMonth);
+                await TimeSheetContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
             //.User.Include(x => x.Logs).SingleAsync(x => x.Id == input.Id);
             return true;
         }
@@ -221,7 +233,7 @@ namespace TimeSheetAPI.Infrastructure
             }
             try
             {
-                defaultWorkweek = await TimeSheetContext.DefaultWorkweek.Where(x => x.Id == defaultWorkweek.Id).SingleOrDefaultAsync();
+                defaultWorkweek = await TimeSheetContext.DefaultWorkweek.Where(x => x.Id == defaultWorkweek.Id).Include(x => x.Monday).Include(x => x.Tuesday).Include(x => x.Wednesday).Include(x => x.Thursday).Include(x => x.Friday).Include(x => x.Saturday).Include(x => x.Sunday).SingleOrDefaultAsync();
             }
             catch (Exception e)
             {
@@ -245,14 +257,13 @@ namespace TimeSheetAPI.Infrastructure
             }
             try
             {
-                await TimeSheetContext.DefaultWorkweek.Where(x => x.Id == defaultWorkweek.Id).SingleOrDefaultAsync();
-                TimeSheetContext.DefaultWorkweek.Update(defaultWorkweek);
+                TimeSheetContext.Update(defaultWorkweek);
+                await TimeSheetContext.SaveChangesAsync();
             }
             catch (Exception e)
             {
                 return false;
             }
-            await TimeSheetContext.SaveChangesAsync();
             return true;
         }
         public async Task<List<string>> GetAllMails()

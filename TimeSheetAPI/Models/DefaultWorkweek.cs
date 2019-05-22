@@ -8,16 +8,6 @@ namespace TimeSheetAPI.Models
 {
     public class DefaultWorkweek
     {
-        public DefaultWorkweek()
-        {
-            this.Monday = new WorkDay { Start = new DateTime(1, 1, 1, 9, 0, 0), Stop = new DateTime(1, 1, 1, 17, 0, 0) };
-            this.Tuesday = new WorkDay { Start = new DateTime(1, 1, 1, 9, 0, 0), Stop = new DateTime(1, 1, 1, 17, 0, 0) };
-            this.Wednesday = new WorkDay { Start = new DateTime(1, 1, 1, 9, 0, 0), Stop = new DateTime(1, 1, 1, 17, 0, 0) };
-            this.Thursday = new WorkDay { Start = new DateTime(1, 1, 1, 9, 0, 0), Stop = new DateTime(1, 1, 1, 17, 0, 0) };
-            this.Friday = new WorkDay { Start = new DateTime(1, 1, 1, 9, 0, 0), Stop = new DateTime(1, 1, 1, 17, 0, 0) };
-            this.Saturday = new WorkDay { Start = new DateTime(1, 1, 1, 9, 0, 0), Stop = new DateTime(1, 1, 1, 17, 0, 0) };
-            this.Sunday = new WorkDay { Start = new DateTime(1, 1, 1, 9, 0, 0), Stop = new DateTime(1, 1, 1, 17, 0, 0) };
-        }
         [Key]
         public string Id { get; set; }
         public virtual WorkDay Monday { get; set; }
@@ -27,5 +17,18 @@ namespace TimeSheetAPI.Models
         public virtual WorkDay Friday { get; set; }
         public virtual WorkDay Saturday { get; set; }
         public virtual WorkDay Sunday { get; set; }
+        public static DefaultWorkweek DefaultValues()
+        {
+            return new DefaultWorkweek
+            {
+                Monday = new WorkDay { Start = new DateTime(1, 1, 1, 9, 0, 0), Stop = new DateTime(1, 1, 1, 17, 0, 0) },
+                Tuesday = new WorkDay { Start = new DateTime(1, 1, 1, 9, 0, 0), Stop = new DateTime(1, 1, 1, 17, 0, 0) },
+                Wednesday = new WorkDay { Start = new DateTime(1, 1, 1, 9, 0, 0), Stop = new DateTime(1, 1, 1, 17, 0, 0) },
+                Thursday = new WorkDay { Start = new DateTime(1, 1, 1, 9, 0, 0), Stop = new DateTime(1, 1, 1, 17, 0, 0) },
+                Friday = new WorkDay { Start = new DateTime(1, 1, 1, 9, 0, 0), Stop = new DateTime(1, 1, 1, 17, 0, 0) },
+                Saturday = new WorkDay { Start = new DateTime(1, 1, 1, 9, 0, 0), Stop = new DateTime(1, 1, 1, 17, 0, 0) },
+                Sunday = new WorkDay { Start = new DateTime(1, 1, 1, 9, 0, 0), Stop = new DateTime(1, 1, 1, 17, 0, 0) },
+            };
+        }
     }
 }

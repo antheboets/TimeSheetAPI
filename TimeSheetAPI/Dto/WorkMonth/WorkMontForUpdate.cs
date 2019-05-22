@@ -12,5 +12,7 @@ namespace TimeSheetAPI.Dto
     {
         public string Id { get; set; }
         public bool Accepted { get; set; }
+        public int Month { get; set; }
+        public string UserId { get; set; }
     }
 }

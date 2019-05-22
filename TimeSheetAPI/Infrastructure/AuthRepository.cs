@@ -64,7 +64,7 @@ namespace TimeSheetAPI.Infrastructure
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            user.DefaultWorkweek = new Models.DefaultWorkweek();
+            user.DefaultWorkweek = Models.DefaultWorkweek.DefaultValues();
 
             user.Role = new Models.Role { Name="Consultant" };
             await TimeSheetContext.AddAsync(user);
@@ -80,20 +80,7 @@ namespace TimeSheetAPI.Infrastructure
             return false;
         }
 
-        public async Task<bool> CreateDefaultWorkweek(Dto.DefaultWorkweek defaultWorkweek)
-        {
-            var ModelDefaultWorkweek = new Models.DefaultWorkweek { Id = defaultWorkweek.Id, Monday = new Models.WorkDay { Id = defaultWorkweek.Monday.Id, Start = defaultWorkweek.Monday.Start, Stop = defaultWorkweek.Monday.Stop }, Tuesday = new Models.WorkDay { Id = defaultWorkweek.Tuesday.Id, Start = defaultWorkweek.Tuesday.Start, Stop= defaultWorkweek.Tuesday.Stop }, Wednesday= new Models.WorkDay { Id = defaultWorkweek.Wednesday.Id, Start = defaultWorkweek.Wednesday.Start, Stop = defaultWorkweek.Wednesday.Stop }, Thursday= new Models.WorkDay { Id = defaultWorkweek.Thursday.Id, Start = defaultWorkweek.Thursday.Start, Stop = defaultWorkweek.Thursday.Stop },Friday= new Models.WorkDay { Id = defaultWorkweek.Friday.Id, Start = defaultWorkweek.Friday.Start, Stop = defaultWorkweek.Friday.Stop },Saturday= new Models.WorkDay { Id = defaultWorkweek.Saturday.Id, Start = defaultWorkweek.Saturday.Start, Stop = defaultWorkweek.Saturday.Stop },Sunday= new Models.WorkDay { Id = defaultWorkweek.Sunday.Id, Start = defaultWorkweek.Sunday.Start, Stop = defaultWorkweek.Sunday.Stop}};
-            try
-            {
-                TimeSheetContext.Update(ModelDefaultWorkweek);
-                await TimeSheetContext.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-            return true;
-        }
+        
 
         public async Task<bool> ChangePassword(Dto.UserId userId, string password)
         {
