@@ -21,6 +21,11 @@ namespace TimeSheetAPI.Infrastructure
             {
                 return false;
             }
+            int currentLogs = (DateTime.Now.Year * 12) + DateTime.Now.Month;
+            if ((log.Start.Year * 12) + log.Start.Month != currentLogs || (log.Stop.Year * 12) + log.Stop.Month != currentLogs)
+            {
+                return false;
+            }
             Models.Project project = await TimeSheetContext.Project.Where(x => x.Id == log.ProjectId).SingleOrDefaultAsync();
             if (project == null)
             {
