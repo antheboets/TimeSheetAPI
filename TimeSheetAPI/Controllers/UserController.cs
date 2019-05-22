@@ -160,7 +160,7 @@ namespace TimeSheetAPI.Controllers
             {
                 return null;
             }
-            return await Repo.();
+            return await Repo.Get;
         }
     }
 }

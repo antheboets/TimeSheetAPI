@@ -346,7 +346,7 @@ namespace TimeSheetAPI.Infrastructure
                 try
                 {
                     await TimeSheetContext.User.Where(x => x.Id == user.Id && x.RoleId == Config.GetSection("Role:Consultant:Id").Value).SingleAsync();
-                    TimeSheetContext.ProjectUser.Add(new Models.ProjectUser { UserId = user.Id, ProjectId = project.Id});
+                    TimeSheetContext.ProjectUser.Add(new Models.ProjectUser { UserId = user.Id, ProjectId = project.Id });
                 }
                 catch (Exception e)
                 {

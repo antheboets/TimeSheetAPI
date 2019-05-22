@@ -205,5 +205,55 @@ namespace TimeSheetAPI.Infrastructure
             //.User.Include(x => x.Logs).SingleAsync(x => x.Id == input.Id);
             return true;
         }
+        public async Task<DefaultWorkweek> GetDefaultWorkweek(Models.DefaultWorkweek defaultWorkweek)
+        {
+            if (defaultWorkweek == null)
+            {
+                return null;
+            }
+            if (defaultWorkweek.Id == null)
+            {
+                return null;
+            }
+            if (defaultWorkweek.Id == "")
+            {
+                return null;
+            }
+            try
+            {
+                defaultWorkweek = await TimeSheetContext.DefaultWorkweek.Where(x => x.Id == defaultWorkweek.Id).SingleOrDefaultAsync();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            return defaultWorkweek;
+        }
+        public async Task<bool> UpdateDefaultWorkWeek(Models.DefaultWorkweek defaultWorkweek)
+        {
+            if (defaultWorkweek == null)
+            {
+                return false;
+            }
+            if (defaultWorkweek.Id == null)
+            {
+                return false;
+            }
+            if (defaultWorkweek.Id == "")
+            {
+                return false;
+            }
+            try
+            {
+                await TimeSheetContext.DefaultWorkweek.Where(x => x.Id == defaultWorkweek.Id).SingleOrDefaultAsync();
+                TimeSheetContext.DefaultWorkweek.Update(defaultWorkweek);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            await TimeSheetContext.SaveChangesAsync();
+            return true;
+        }
     }
 }
