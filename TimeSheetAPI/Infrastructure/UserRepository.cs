@@ -193,11 +193,12 @@ namespace TimeSheetAPI.Infrastructure
             try
             {
                 Models.User userOld = await TimeSheetContext.User.Where(x => x.Id == user.Id).SingleOrDefaultAsync();
-                user.RoleId = user.RoleId;
-                user.ChangeHistory = user.ChangeHistory;
-                user.DefaultWorkweekId = user.DefaultWorkweekId;
-                user.PasswordHash = user.PasswordHash;
-                user.PasswordSalt = user.PasswordSalt;
+                user.RoleId = userOld.RoleId;
+                user.Email = userOld.Email;
+                user.ChangeHistory = userOld.ChangeHistory;
+                user.DefaultWorkweekId = userOld.DefaultWorkweekId;
+                user.PasswordHash = userOld.PasswordHash;
+                user.PasswordSalt = userOld.PasswordSalt;
                 TimeSheetContext.Entry(userOld).State = EntityState.Detached;
                 userOld = null;
                 TimeSheetContext.Update(user);
