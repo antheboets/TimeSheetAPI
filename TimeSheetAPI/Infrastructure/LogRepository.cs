@@ -72,7 +72,14 @@ namespace TimeSheetAPI.Infrastructure
             {
                 return null;
             }
-            return await TimeSheetContext.Log.Where(x => x.Id == log.Id && x.UserId == log.UserId).SingleOrDefaultAsync();
+            try
+            {
+                return await TimeSheetContext.Log.Where(x => x.Id == log.Id && x.UserId == log.UserId).SingleOrDefaultAsync();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
         public async Task<List<Log>> GetAll()
         {
@@ -108,7 +115,25 @@ namespace TimeSheetAPI.Infrastructure
         {
             return await TimeSheetContext.Log.Skip(page * 20).Take((page + 1) * 20).OrderBy(x => x.Start).ToListAsync(); ;
         }
-
+        public async Task<Log> GetForHr(Log log)
+        {
+            if (log.Id == null)
+            {
+                return null;
+            }
+            if (log.Id == "")
+            {
+                return null;
+            }
+            try
+            {
+                return await TimeSheetContext.Log.Where(x => x.Id == log.Id).SingleOrDefaultAsync();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
         public async Task<List<Log>> GetWeek(DateTime WeekStart, DateTime WeekStop, string userId)
         {
             return await TimeSheetContext.Log.Where(x => x.Start > WeekStart && x.Stop < WeekStop && x.UserId == userId).ToListAsync();

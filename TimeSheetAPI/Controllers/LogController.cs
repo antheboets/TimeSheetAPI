@@ -9,6 +9,7 @@ using TimeSheetAPI.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Net;
+using Microsoft.Extensions.Configuration;
 
 namespace TimeSheetAPI.Controllers
 {
@@ -18,10 +19,12 @@ namespace TimeSheetAPI.Controllers
     public class LogController : ControllerBase
     {
         private readonly ILogRepository Repo;
-
-        public LogController(ILogRepository Repo)
+        private readonly IConfiguration Config;
+        
+        public LogController(ILogRepository Repo,IConfiguration Config)
         {
             this.Repo = Repo;
+            this.Config = Config;
         }
         [HttpPost("Create")]
         public async Task<ActionResult> Create([FromBody]Dto.LogForCreate log)
@@ -56,12 +59,25 @@ namespace TimeSheetAPI.Controllers
         [HttpGet("Get")]
         public async Task<Dto.Log> Get([FromQuery] string Id)
         {
-            Models.Log log = new Models.Log { Id = Id, UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value };
-            if (log == null)
+            Models.Log log = null;
+            if (User.FindFirst(ClaimTypes.Role).Value == Config.GetSection("Role:Consultant:Name").Value)
             {
-                return null;
+                log = new Models.Log { Id = Id, UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value };
+                if (log == null)
+                {
+                    return null;
+                }
+                log = await Repo.Get(log);
             }
-            log = await Repo.Get(log);
+            else
+            {
+                log = new Models.Log { Id = Id };
+                if (log == null)
+                {
+                    return null;
+                }
+                log = await Repo.GetForHr(log);
+            }
             if (log == null)
             {
                 return null;

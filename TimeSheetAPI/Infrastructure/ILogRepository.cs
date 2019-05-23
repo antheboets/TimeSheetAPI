@@ -14,6 +14,7 @@ namespace TimeSheetAPI.Infrastructure
         Task<bool> Delete(Models.Log log);
         Task<bool> Update(Models.Log log);
         Task<Models.Log> Get(Models.Log log);
+        Task<Models.Log> GetForHr(Models.Log log);
         Task<List<Models.Log>> GetAll();
         Task<List<Models.Log>> GetWeek(DateTime WeekStart, DateTime WeekStop, string userId);
         Task<List<Models.Log>> GetAllOfUser(string userId);
