@@ -35,7 +35,7 @@ namespace TimeSheetAPI.Controllers
             {
                 return BadRequest("Username already exists");
             }
-            Models.User userToCreate = new Models.User { Email = user.Email.ToLower() };
+            Models.User userToCreate = new Models.User { Email = user.Email.ToLower()};
 
             var createdUser = await Repo.Register(userToCreate, user.Password);
 

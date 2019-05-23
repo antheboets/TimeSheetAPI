@@ -10,7 +10,7 @@ using TimeSheetAPI.Infrastructure;
 namespace TimeSheetAPI.Migrations
 {
     [DbContext(typeof(TimeSheetContext))]
-    [Migration("20190523184833_Init")]
+    [Migration("20190523204649_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -172,6 +172,8 @@ namespace TimeSheetAPI.Migrations
                     b.Property<string>("DefaultWorkweekId");
 
                     b.Property<string>("Email");
+
+                    b.Property<double>("HourlyRate");
 
                     b.Property<string>("Name");
 

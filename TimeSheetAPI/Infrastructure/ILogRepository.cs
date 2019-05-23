@@ -20,5 +20,6 @@ namespace TimeSheetAPI.Infrastructure
         Task<List<Models.Log>> GetAllOfUser(string userId);
         Task<List<Models.Log>> GetDynamicScroll(int page);
         Task<List<Models.Log>> GetDay(DateTime Day, string userId);
+        Task<Models.WorkMonth> GetWorkMonths(Models.User user, DateTime Time);
     }
 }

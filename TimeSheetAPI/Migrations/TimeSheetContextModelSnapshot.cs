@@ -171,6 +171,8 @@ namespace TimeSheetAPI.Migrations
 
                     b.Property<string>("Email");
 
+                    b.Property<double>("HourlyRate");
+
                     b.Property<string>("Name");
 
                     b.Property<byte[]>("PasswordHash");

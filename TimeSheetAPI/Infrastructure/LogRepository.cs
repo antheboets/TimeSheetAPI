@@ -138,6 +138,12 @@ namespace TimeSheetAPI.Infrastructure
         {
             return await TimeSheetContext.Log.Where(x => x.Start > WeekStart && x.Stop < WeekStop && x.UserId == userId).ToListAsync();
         }
+
+        public Task<WorkMonth> GetWorkMonths(User user, DateTime Time)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsCurrentMonth(Models.Log log)
         {
             int currentMonth = (DateTime.Now.Year * 12) + DateTime.Now.Month;

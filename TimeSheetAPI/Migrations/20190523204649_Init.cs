@@ -156,7 +156,8 @@ namespace TimeSheetAPI.Migrations
                     PasswordSalt = table.Column<byte[]>(nullable: true),
                     RoleId = table.Column<string>(nullable: true),
                     DefaultWorkweekId = table.Column<string>(nullable: true),
-                    ChangeHistory = table.Column<bool>(nullable: false)
+                    ChangeHistory = table.Column<bool>(nullable: false),
+                    HourlyRate = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
