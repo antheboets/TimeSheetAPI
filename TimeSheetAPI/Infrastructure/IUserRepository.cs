@@ -24,5 +24,6 @@ namespace TimeSheetAPI.Infrastructure
         Task<bool> UpdateDefaultWorkWeek(Models.DefaultWorkweek defaultWorkweek);
         Task<List<string>> GetAllMails();
         Task<List<Models.Log>> GetLogsOfUserMonth(Models.User user, DateTime Time);
+        List<string> LogsToIds(ICollection<Models.Log> logs);
     }
 }

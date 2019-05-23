@@ -156,11 +156,11 @@ namespace TimeSheetAPI.Infrastructure
             {
                 int curentMonth = (DateTime.Now.Year * 12) + DateTime.Now.Month;
 
-                List<Models.Log> logs = user.Logs.Where(x => ((x.Start.Year * 12) + x.Start.Month) == curentMonth && ((x.Stop.Year * 12) + x.Stop.Month) == curentMonth).ToList();
+                //List<Models.Log> logs = user.Logs.Where(x => ((x.Start.Year * 12) + x.Start.Month) == curentMonth && ((x.Stop.Year * 12) + x.Stop.Month) == curentMonth).ToList();
                 int sec = 0;
                 int min = 0;
                 int hour = 0;
-                foreach (Models.Log log in logs)
+                foreach (Models.Log log in user.Logs)
                 {
                     sec += log.Stop.Second - log.Start.Second;
                     min += log.Stop.Minute - log.Start.Minute;
@@ -339,6 +339,15 @@ namespace TimeSheetAPI.Infrastructure
                 return null;
             }
             return logsOfMonth;
+        }
+        public List<string> LogsToIds(ICollection<Models.Log> logs)
+        {
+            List<string> ids = new List<string>();
+            foreach (Models.Log log in logs)
+            {
+                ids.Add(log.Id);
+            }
+            return ids;
         }
     }
 }

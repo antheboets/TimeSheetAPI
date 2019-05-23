@@ -47,15 +47,16 @@ namespace TimeSheetAPI.Controllers
             await Task.WhenAll(userModel, ExceptionDaysIds, LogsIds);
             */
             var userModel = await Repo.Get(user);
+            userModel.Logs = await Repo.GetLogsOfUserMonth(userModel, UserId.Month);
+            Dto.WorkMonth workMonthDto = null;
             var ExceptionDaysIds = await Repo.GetListOfExceptionDays(user);
-            var LogsIds = await Repo.GetListOfLogs(user);
+            var LogsIds = Repo.LogsToIds(userModel.Logs);
             var workmMonth = await Repo.GetWorkMonths(userModel, UserId.Month);
             if (userModel == null)
             {
                 return null;
             }
-            userModel.Logs =  await Repo.GetLogsOfUserMonth(userModel, UserId.Month);
-            Dto.WorkMonth workMonthDto = null;
+            
             if (workmMonth != null)
             {
                 workMonthDto = new Dto.WorkMonth { Id = workmMonth.Id, Accepted = workmMonth.Accepted, Month = workmMonth.Month, UserId = workmMonth.UserId };
