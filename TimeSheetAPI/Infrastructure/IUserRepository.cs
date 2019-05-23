@@ -25,5 +25,7 @@ namespace TimeSheetAPI.Infrastructure
         Task<List<string>> GetAllMails();
         Task<List<Models.Log>> GetLogsOfUserMonth(Models.User user, DateTime Time);
         List<string> LogsToIds(ICollection<Models.Log> logs);
+        bool SendMail(string body, Models.User user);
+        Task<Models.User> GetUserFromWorkMonth(Models.WorkMonth workMonth);
     }
 }

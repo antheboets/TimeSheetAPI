@@ -72,19 +72,19 @@ namespace TimeSheetAPI.Controllers
             return Ok(new { token = tokenHandler.WriteToken(token) });
         }
         [HttpPost("NewPass")]
-        public async Task<Dto.Success> ChangePassword([FromBody] Dto.AuthNewPass authNewPass)
+        public async Task<ActionResult<Dto.Success>> ChangePassword([FromBody] Dto.AuthNewPass authNewPass)
         {
             Dto.UserId userId = new UserId { Id = User.FindFirst(ClaimTypes.NameIdentifier).Value };
             
             if (authNewPass == null)
             {
-                return new Success { SuccessState = false };
+                return BadRequest( new Success { SuccessState = false });
             }
             if (await Repo.ChangePassword(userId, authNewPass.NewPassword))
             {
-                return new Success { SuccessState = true };
+                return Ok( new Success { SuccessState = true });
             }
-            return new Success { SuccessState = true };
+            return Ok(new Success { SuccessState = true });
         }
         [HttpPost("CSVUser")]
         public async Task<ActionResult> CsvUser()

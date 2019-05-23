@@ -76,20 +76,20 @@ namespace TimeSheetAPI.Controllers
             return BadRequest();
         }
         [HttpPost("GetFull")]
-        public async Task<Dto.ProjectForGetFull> GetFull([FromBody]Dto.ProjectForGet Project)
+        public async Task<ActionResult<Dto.ProjectForGetFull>> GetFull([FromBody]Dto.ProjectForGet Project)
         {
             if (Project == null)
             {
-                return null;
+                return BadRequest();
             }
             if (Project.Id == "")
             {
-                return null;
+                return BadRequest();
             }
             Models.Project projectModel = await Repo.GetFull(new Models.Project { Id = Project.Id });
             if (projectModel == null)
             {
-                return null;
+                return BadRequest();
             }
             List<Dto.Log> logs = new List<Dto.Log>();
             foreach (Models.Log log in projectModel.Logs)
@@ -106,23 +106,23 @@ namespace TimeSheetAPI.Controllers
             {
                 users.Add(new Dto.UserForGet { Id = projectUser.User.Id, Name = projectUser.User.Name, RoleId = projectUser.User.RoleId, Email = projectUser.User.Email,ChangeHistory= projectUser.User.ChangeHistory });
             }
-            return new Dto.ProjectForGetFull { Id = projectModel.Id, Logs = logs, Activitys = activities, UsersOnTheProject = users, InProgress = projectModel.InProgress, Billable = projectModel.Billable, Overtime = projectModel.Overtime, Name = projectModel.Name, Company = new Company { Id = projectModel.Company.Id, Name = projectModel.Company.Name } };
+            return Ok(new Dto.ProjectForGetFull { Id = projectModel.Id, Logs = logs, Activitys = activities, UsersOnTheProject = users, InProgress = projectModel.InProgress, Billable = projectModel.Billable, Overtime = projectModel.Overtime, Name = projectModel.Name, Company = new Company { Id = projectModel.Company.Id, Name = projectModel.Company.Name } });
         }
         [HttpPost("GetSmall")]
-        public async Task<Dto.ProjectForGetSmall> GetSmall([FromBody]Dto.ProjectForGet Project)
+        public async Task<ActionResult<Dto.ProjectForGetSmall>> GetSmall([FromBody]Dto.ProjectForGet Project)
         {
             if (Project == null)
             {
-                return null;
+                return BadRequest();
             }
             if (Project.Id == "")
             {
-                return null;
+                return BadRequest();
             }
             Models.Project projectModel = await Repo.GetFull(new Models.Project { Id = Project.Id });
             if (projectModel == null)
             {
-                return null;
+                return BadRequest();
             }
             List<string> logIds = new List<string>();
             foreach (Models.Log log in projectModel.Logs)
@@ -139,10 +139,10 @@ namespace TimeSheetAPI.Controllers
             {
                 userIds.Add(user.UserId);
             }
-            return new Dto.ProjectForGetSmall { Id = projectModel.Id, LogsId = logIds, ActivitysId = activitieIds, UsersId = userIds, InProgress = projectModel.InProgress, Billable = projectModel.Billable, Overtime = projectModel.Overtime, Name = projectModel.Name, CompanyId = projectModel.Company.Id };
+            return Ok(new Dto.ProjectForGetSmall { Id = projectModel.Id, LogsId = logIds, ActivitysId = activitieIds, UsersId = userIds, InProgress = projectModel.InProgress, Billable = projectModel.Billable, Overtime = projectModel.Overtime, Name = projectModel.Name, CompanyId = projectModel.Company.Id });
         }
         [HttpPost("Update")]
-        public async Task<ActionResult> Upadate([FromBody]Dto.ProjectForUpdate project)
+        public async Task<ActionResult> Update([FromBody]Dto.ProjectForUpdate project)
         {
             if (User.FindFirst(ClaimTypes.Role).Value == Config.GetSection("Role:Consultant:Name").Value)
             {
@@ -180,12 +180,12 @@ namespace TimeSheetAPI.Controllers
             return BadRequest();
         }
         [HttpGet("GetList")]
-        public async Task<ICollection<Dto.ProjectForGetSmall>> GetList()
+        public async Task<ActionResult<ICollection<Dto.ProjectForGetSmall>>> GetList()
         {
             List<Models.Project> projectModel = await Repo.GetAllOfUser(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             if (projectModel.Count == 0)
             {
-                return null;
+                return BadRequest();
             }
             List<Dto.ProjectForGetSmall> projectsDto = new List<ProjectForGetSmall>();
             foreach (var project in projectModel)
@@ -225,7 +225,7 @@ namespace TimeSheetAPI.Controllers
                 projectsDto.Add(projectForGetSmall);
             }
             //return Mapper.Map<List<Dto.ProjectForGetSmall>>(projects);
-            return projectsDto;
+            return Ok(projectsDto);
         }
         [HttpPost("RemoveUser")]
         public async Task<ActionResult> RemoveUser(Dto.ProjectForUserList projectForUserList)
@@ -283,7 +283,7 @@ namespace TimeSheetAPI.Controllers
         }
         [AllowAnonymous]
         [HttpGet("Test")]
-        public async Task<List<Dto.ProjectForGetSmall>> Test()
+        public async Task<ActionResult<List<Dto.ProjectForGetSmall>>> Test()
         {
             List<Models.Project> projects = await Repo.GetAll();
             List<Dto.ProjectForGetSmall> projectsDto = new List<ProjectForGetSmall>();
@@ -326,7 +326,7 @@ namespace TimeSheetAPI.Controllers
             }
 
             //return Mapper.Map<List<Dto.ProjectForGetSmall>>(projects);
-            return projectsDto;
+            return Ok(projectsDto);
         }
     }
 }

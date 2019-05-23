@@ -57,7 +57,7 @@ namespace TimeSheetAPI.Controllers
             return BadRequest();
         }
         [HttpGet("Get")]
-        public async Task<Dto.Log> Get([FromQuery] string Id)
+        public async Task<ActionResult<Dto.Log>> Get([FromQuery] string Id)
         {
             Models.Log log = null;
             if (User.FindFirst(ClaimTypes.Role).Value == Config.GetSection("Role:Consultant:Name").Value)
@@ -65,7 +65,7 @@ namespace TimeSheetAPI.Controllers
                 log = new Models.Log { Id = Id, UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value };
                 if (log == null)
                 {
-                    return null;
+                    return BadRequest();
                 }
                 log = await Repo.Get(log);
             }
@@ -74,19 +74,19 @@ namespace TimeSheetAPI.Controllers
                 log = new Models.Log { Id = Id };
                 if (log == null)
                 {
-                    return null;
+                    return BadRequest();
                 }
                 log = await Repo.GetForHr(log);
             }
             if (log == null)
             {
-                return null;
+                return BadRequest();
             }
-            return new Dto.Log { Id = log.Id, Start = log.Start, Stop = log.Stop, Description=log.Description, ActivityId = log.ActivityId, UserId = log.ActivityId, ProjectId = log.ProjectId };
+            return Ok(new Dto.Log { Id = log.Id, Start = log.Start, Stop = log.Stop, Description=log.Description, ActivityId = log.ActivityId, UserId = log.ActivityId, ProjectId = log.ProjectId });
         }
         [AllowAnonymous]
         [HttpGet("Test")]
-        public async Task<List<Dto.Log>> Get()
+        public async Task<ActionResult<List<Dto.Log>>> Get()
         {
             List<Dto.Log> DtoLogs = new List<Dto.Log>();
             List<Models.Log> logs = await Repo.GetAll();
@@ -94,10 +94,10 @@ namespace TimeSheetAPI.Controllers
             {
                 DtoLogs.Add(new Dto.Log { Id=item.Id, Start=item.Start, Stop = item.Stop, Description=item.Description, UserId=item.UserId, ActivityId=item.ActivityId, ProjectId = item.ProjectId });
             }
-            return DtoLogs;
+            return Ok(DtoLogs);
         }
         [HttpPost("GetWeek")]
-        public async Task<ICollection<Dto.Log>> GetWeek([FromBody] Dto.TimeObject CurrentTimeObj)
+        public async Task<ActionResult<ICollection<Dto.Log>>> GetWeek([FromBody] Dto.TimeObject CurrentTimeObj)
         {
             DateTime CurrentTime;
             if (CurrentTimeObj == null)
@@ -117,10 +117,10 @@ namespace TimeSheetAPI.Controllers
             {
                 DtoLogs.Add(new Dto.Log { Id = log.Id, Start = log.Start, Stop = log.Stop, Description = log.Description, ActivityId = log.ActivityId, ProjectId = log.ProjectId, UserId = log.UserId } );
             }
-            return DtoLogs;
+            return Ok(DtoLogs);
         }
         [HttpGet("GetAllOfUser")]
-        public async Task<ICollection<Dto.Log>> GetAllOfUser()
+        public async Task<ActionResult<ICollection<Dto.Log>>> GetAllOfUser()
         {
             var logs = await Repo.GetAllOfUser(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             List<Dto.Log> DtoLogs = new List<Dto.Log>();
@@ -128,11 +128,11 @@ namespace TimeSheetAPI.Controllers
             {
                 DtoLogs.Add(new Dto.Log { Id = log.Id, Start = log.Start, Stop = log.Stop, Description = log.Description, ActivityId = log.ActivityId, ProjectId = log.ProjectId, UserId = log.UserId });
             }
-            return DtoLogs;
+            return Ok(DtoLogs);
         }
         //todo get logs dynamic scrolling 20 per request
         [HttpGet("GetList")]
-        public async Task<ICollection<Dto.Log>> GetList([FromQuery]int Page = 0)
+        public async Task<ActionResult<ICollection<Dto.Log>>> GetList([FromQuery]int Page = 0)
         {
             if (Page < 0)
             {
@@ -144,7 +144,7 @@ namespace TimeSheetAPI.Controllers
             {
                 DtoLogs.Add(new Dto.Log { Id = log.Id, Start = log.Start, Stop = log.Stop, Description = log.Description, ActivityId = log.ActivityId, ProjectId = log.ProjectId, UserId = log.UserId });
             }
-            return DtoLogs;
+            return Ok(DtoLogs);
         }
     }
 }

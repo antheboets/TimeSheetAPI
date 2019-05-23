@@ -29,11 +29,11 @@ namespace TimeSheetAPI.Controllers
             this.Mapper = Mapper;
         }
         [HttpPost("Get")]
-        public async Task<Dto.UserForGetHR> Get([FromBody] Dto.UserForGet UserId)
+        public async Task<ActionResult<Dto.UserForGetHR>> Get([FromBody] Dto.UserForGet UserId)
         {
             if (UserId.Id == "")
             {
-                return null;
+                return BadRequest();
             }
             if (UserId.Month == DateTime.MinValue)
             {
@@ -54,24 +54,24 @@ namespace TimeSheetAPI.Controllers
             var workmMonth = await Repo.GetWorkMonths(userModel, UserId.Month);
             if (userModel == null)
             {
-                return null;
+                return BadRequest();
             }
-            
+
             if (workmMonth != null)
             {
                 workMonthDto = new Dto.WorkMonth { Id = workmMonth.Id, Accepted = workmMonth.Accepted, Month = workmMonth.Month, UserId = workmMonth.UserId };
                 workMonthDto.Salary = Repo.GetSalary(userModel);
                 workMonthDto.TotalHours = Repo.GetTotalTime(userModel);
             }
-            Dto.UserForGetHR userForGet = new Dto.UserForGetHR { Id= userModel.Id , Name= userModel.Name, ChangeHistory= userModel.ChangeHistory, Email= userModel.Email, DefaultWorkweekId= userModel.DefaultWorkweekId, RoleId= userModel.RoleId, ExceptionWorkDayIds= ExceptionDaysIds, LogIds=LogsIds , WorkMonth = workMonthDto };
+            Dto.UserForGetHR userForGet = new Dto.UserForGetHR { Id = userModel.Id, Name = userModel.Name, ChangeHistory = userModel.ChangeHistory, Email = userModel.Email, DefaultWorkweekId = userModel.DefaultWorkweekId, RoleId = userModel.RoleId, ExceptionWorkDayIds = ExceptionDaysIds, LogIds = LogsIds, WorkMonth = workMonthDto };
             //Mapper.Map<Dto.UserForGet>(userModel.Result);
             if (userForGet == null)
             {
-                return null;
+                return BadRequest();
             }
             if (userForGet.Id == "")
             {
-                return null;
+                return BadRequest();
             }
             //return new Dto.UserForGet { Id = userModel.Result.Id, Name = userModel.Result.Name, Email = userModel.Result.Email, LogIds = LogsIds.Result, ChangeHistory = userModel.Result.ChangeHistory, RoleId = userModel.Result.RoleId, DefaultWorkweekId = userModel.Result.DefaultWorkweekId, ExceptionWorkDayIds = ExceptionDaysIds.Result };
             if (ExceptionDaysIds != null)
@@ -82,7 +82,7 @@ namespace TimeSheetAPI.Controllers
             {
                 userForGet.LogIds = LogsIds;
             }
-            return userForGet;
+            return Ok(userForGet);
         }
         [HttpPost("Update")]
         public async Task<ActionResult> Update([FromBody]Dto.UserForUpdate userForUpdate)
@@ -96,7 +96,7 @@ namespace TimeSheetAPI.Controllers
             {
                 return BadRequest();
             }
-            Models.User user = Mapper.Map<Models.User>(userForUpdate);
+            Models.User user = new Models.User { Id = User.FindFirst(ClaimTypes.NameIdentifier).Value , Email = userForUpdate.Email, Name= userForUpdate.Name};
             if (await Repo.Update(user))
             {
                 return Ok();
@@ -105,18 +105,18 @@ namespace TimeSheetAPI.Controllers
         }
         [AllowAnonymous]
         [HttpGet("test")]
-        public async Task<List<Dto.UserForGetFull>> Test()
+        public async Task<ActionResult<List<Dto.UserForGetFull>>> Test()
         {
-            return Mapper.Map<List<Dto.UserForGetFull>> (await Repo.GetAll());
+            return Ok(Mapper.Map<List<Dto.UserForGetFull>>(await Repo.GetAll()));
         }
         //HR
         [HttpGet("GetConsultants")]
-        public async Task<List<Dto.UserForGetHR>> GetConsultants()
+        public async Task<ActionResult<List<Dto.UserForGetHR>>> GetConsultants()
         {
 
             if (User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Human-Resources").Value)
             {
-                Unauthorized();
+                return Unauthorized();
             }
             /*
             var users = Task.Run(()=> Repo.GetAllConsultant());
@@ -128,7 +128,7 @@ namespace TimeSheetAPI.Controllers
             List<Dto.UserForGetHR> userDto = new List<Dto.UserForGetHR>();
             if (users == null)
             {
-                BadRequest();
+                return BadRequest();
             }
             foreach (Models.User user in users)
             {
@@ -143,20 +143,19 @@ namespace TimeSheetAPI.Controllers
                     workMonth.Salary = Repo.GetSalary(user);
                     workMonth.TotalHours = Repo.GetTotalTime(user);
                     userForGetHR.WorkMonth = workMonth;
-                    
+
                 }
                 catch (Exception e)
                 {
-
+                    return BadRequest();
                 }
                 userDto.Add(userForGetHR);
             }
-            return userDto;
+            return Ok(userDto);
         }
         [HttpPost("UpdateWorkMonth")]
         public async Task<ActionResult> UpdateUser(Dto.WorkMontForUpdate workMonth)
         {
-            
             if (workMonth == null)
             {
                 return BadRequest();
@@ -164,28 +163,40 @@ namespace TimeSheetAPI.Controllers
             Models.WorkMonth workMonthModel = new Models.WorkMonth { Id = workMonth.Id, Accepted = workMonth.Accepted, Month = workMonth.Month, UserId = workMonth.UserId };
             if (await Repo.UpdateWorkMonth(workMonthModel))
             {
+                if (!workMonth.Accepted)
+                {
+                    Models.User user = await Repo.GetUserFromWorkMonth(workMonthModel);
+                    if (user == null)
+                    {
+                        return BadRequest();
+                    }
+                    if (Repo.SendMail(workMonth.Body, user))
+                    {
+                        return Ok();
+                    }
+                }
                 return Ok();
             }
             return BadRequest();
         }
         [HttpPost("GetDefaultWorkWeek")]
-        public async Task<Dto.DefaultWorkweek> GetDefaultWorkWeek([FromQuery] string Id)
+        public async Task<ActionResult<Dto.DefaultWorkweek>> GetDefaultWorkWeek([FromQuery] string Id)
         {
             if (Id == null)
             {
-                return null;
+                return BadRequest();
             }
             if (Id == "")
             {
-                return null;
+                return BadRequest();
             }
             Models.DefaultWorkweek defaultWorkweekModel = new Models.DefaultWorkweek { Id = Id };
             defaultWorkweekModel = await Repo.GetDefaultWorkweek(defaultWorkweekModel);
             if (defaultWorkweekModel == null)
             {
-                return null;
+                return BadRequest();
             }
-            return Mapper.Map <Dto.DefaultWorkweek>(defaultWorkweekModel);//new Dto.DefaultWorkweek { Id = defaultWorkweekModel.Id, Monday = defaultWorkweekModel.Monday};
+            return Ok(Mapper.Map<Dto.DefaultWorkweek>(defaultWorkweekModel));
         }
         [HttpPost("UpdateDefaultWorkWeek")]
         public async Task<ActionResult> UpdateDefaultWorkWeek([FromBody]Dto.DefaultWorkweek defaultWorkweek)
@@ -210,19 +221,19 @@ namespace TimeSheetAPI.Controllers
             return BadRequest();
         }
         [HttpGet("GetAllEmails")]
-        public async Task<List<Dto.UserForEmail>> GetAllEmails()
+        public async Task<ActionResult<List<Dto.UserForEmail>>> GetAllEmails()
         {
             if (User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Human-Resources").Value)
             {
-                Unauthorized();
+                return Unauthorized();
             }
-            List<string> Emails =  await Repo.GetAllMails();
+            List<string> Emails = await Repo.GetAllMails();
             List<Dto.UserForEmail> userForEmails = new List<Dto.UserForEmail>();
             foreach (string email in Emails)
             {
-                userForEmails.Add(new UserForEmail {Email=email });
+                userForEmails.Add(new UserForEmail { Email = email });
             }
-            return userForEmails;
+            return Ok(userForEmails);
         }
     }
 }

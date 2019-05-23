@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using TimeSheetAPI.Models;
 using Microsoft.Extensions.Configuration;
+using System.Net.Mail;
 
 namespace TimeSheetAPI.Infrastructure
 {
@@ -189,9 +190,23 @@ namespace TimeSheetAPI.Infrastructure
             {
                 return false;
             }
-            TimeSheetContext.Update(user);
+            try
+            {
+                Models.User userOld = await TimeSheetContext.User.Where(x => x.Id == user.Id).SingleOrDefaultAsync();
+                user.RoleId = user.RoleId;
+                user.ChangeHistory = user.ChangeHistory;
+                user.DefaultWorkweekId = user.DefaultWorkweekId;
+                user.PasswordHash = user.PasswordHash;
+                user.PasswordSalt = user.PasswordSalt;
+                TimeSheetContext.Entry(userOld).State = EntityState.Detached;
+                userOld = null;
+                TimeSheetContext.Update(user);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
             await TimeSheetContext.SaveChangesAsync();
-            //.User.Include(x => x.Logs).SingleAsync(x => x.Id == input.Id);
             return true;
         }
         public async Task<bool> UpdateWorkMonth(Models.WorkMonth workMonth)
@@ -348,6 +363,22 @@ namespace TimeSheetAPI.Infrastructure
                 ids.Add(log.Id);
             }
             return ids;
+        }
+        public bool SendMail(string body, Models.User user)
+        {
+            MailMessage mailMessage = new MailMessage("ehbtimesheetapi@gmail.com", "anthe.boetsaaaaaaaa@gmail.com"/*user.Email*/);
+            mailMessage.Subject = "TimeSheet";
+            mailMessage.Body = body;
+            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
+            smtpClient.Credentials = new System.Net.NetworkCredential { UserName = "ehbtimesheetapi@gmail.com", Password = "k5QW4R9u5jtHFyQS" };
+            smtpClient.EnableSsl = true;
+            smtpClient.Send(mailMessage);
+            return true;
+        }
+        public async Task<Models.User> GetUserFromWorkMonth(Models.WorkMonth workMonth)
+        {
+            string UserId = await TimeSheetContext.WorkMonth.Where(x => x.Id == workMonth.Id).Select(x => x.UserId).SingleOrDefaultAsync();
+            return await TimeSheetContext.User.Where(x => x.Id == UserId).SingleOrDefaultAsync();
         }
     }
 }
