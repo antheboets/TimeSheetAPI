@@ -113,8 +113,7 @@ namespace TimeSheetAPI.Controllers
         [HttpGet("GetConsultants")]
         public async Task<ActionResult<List<Dto.UserForGetHR>>> GetConsultants()
         {
-
-            if (User.FindFirst(ClaimTypes.Role).Value != Config.GetSection("Role:Human-Resources").Value)
+            if (User.FindFirst(ClaimTypes.Role).Value == Config.GetSection("Role:Consultant:name").Value)
             {
                 return Unauthorized();
             }

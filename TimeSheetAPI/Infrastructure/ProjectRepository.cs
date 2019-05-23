@@ -247,8 +247,15 @@ namespace TimeSheetAPI.Infrastructure
                     {
                         return false;
                     }
-                    Models.ProjectUser projectUser = new ProjectUser { UserId = userFromDb.Id, ProjectId = project.Id };
-                    await TimeSheetContext.ProjectUser.AddAsync(projectUser);
+                    try
+                    {
+                        //await TimeSheetContext.ProjectUser.Where(x=> x.ProjectId == project.Id &&).
+                    }
+                    catch (Exception e)
+                    {
+                        Models.ProjectUser projectUser = new ProjectUser { UserId = userFromDb.Id, ProjectId = project.Id };
+                        await TimeSheetContext.ProjectUser.AddAsync(projectUser);
+                    }
                 }
                 catch (Exception e)
                 {
