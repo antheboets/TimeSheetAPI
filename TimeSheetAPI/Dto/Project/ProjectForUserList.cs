@@ -8,6 +8,6 @@ namespace TimeSheetAPI.Dto
     public class ProjectForUserList
     {
         public string ProjectId { get; set; }
-        public List<Dto.UserId> UserIds { get; set; }
+        public List<string> UserIds { get; set; }
     }
 }

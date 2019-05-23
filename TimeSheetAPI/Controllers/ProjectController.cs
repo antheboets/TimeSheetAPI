@@ -243,9 +243,9 @@ namespace TimeSheetAPI.Controllers
                 return BadRequest();
             }
             List<Models.User> userList = new List<Models.User>();
-            foreach (Dto.UserId user in projectForUserList.UserIds)
+            foreach (string userId in projectForUserList.UserIds)
             {
-                userList.Add(new Models.User { Id = user.Id });
+                userList.Add(new Models.User { Id = userId });
             }
             Models.Project project = new Models.Project { Id = projectForUserList.ProjectId };
             if (await Repo.RemoveUsers(project, userList))
@@ -270,9 +270,9 @@ namespace TimeSheetAPI.Controllers
                 return BadRequest();
             }
             List<Models.User> userList = new List<Models.User>();
-            foreach (Dto.UserId user in projectForUserList.UserIds)
+            foreach (string userId in projectForUserList.UserIds)
             {
-                userList.Add(new Models.User {Id = user.Id});
+                userList.Add(new Models.User {Id = userId});
             }
             Models.Project project = new Models.Project { Id = projectForUserList.ProjectId};
             if (await Repo.AddUsers(project, userList))

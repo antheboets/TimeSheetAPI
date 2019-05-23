@@ -249,7 +249,7 @@ namespace TimeSheetAPI.Infrastructure
                     }
                     try
                     {
-                        //await TimeSheetContext.ProjectUser.Where(x=> x.ProjectId == project.Id &&).
+                        await TimeSheetContext.ProjectUser.Where(x => x.ProjectId == project.Id && x.UserId == user.Id).SingleOrDefaultAsync();
                     }
                     catch (Exception e)
                     {
@@ -304,7 +304,10 @@ namespace TimeSheetAPI.Infrastructure
                 try
                 {
                     Models.ProjectUser UserOnProject = await TimeSheetContext.ProjectUser.Where(x => x.UserId == user.Id && x.ProjectId == project.Id).SingleOrDefaultAsync();
-                    TimeSheetContext.Remove(UserOnProject);
+                    if (UserOnProject != null)
+                    {
+                        TimeSheetContext.Remove(UserOnProject);
+                    }
                 }
                 catch(Exception e)
                 {
@@ -353,7 +356,13 @@ namespace TimeSheetAPI.Infrastructure
                 try
                 {
                     await TimeSheetContext.User.Where(x => x.Id == user.Id && x.RoleId == Config.GetSection("Role:Consultant:Id").Value).SingleAsync();
-                    TimeSheetContext.ProjectUser.Add(new Models.ProjectUser { UserId = user.Id, ProjectId = project.Id });
+                    try
+                    {
+                        await TimeSheetContext.ProjectUser.Where(x => x.ProjectId == project.Id && x.UserId == user.Id).SingleOrDefaultAsync();
+                    }
+                    catch (Exception e) {
+                        TimeSheetContext.ProjectUser.Add(new Models.ProjectUser { UserId = user.Id, ProjectId = project.Id });
+                    }
                 }
                 catch (Exception e)
                 {
