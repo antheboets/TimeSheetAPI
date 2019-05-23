@@ -96,7 +96,7 @@ namespace TimeSheetAPI.Controllers
             {
                 return BadRequest();
             }
-            Models.User user = Mapper.Map<Models.User>(userForUpdate);
+            Models.User user = new Models.User { Id = User.FindFirst(ClaimTypes.NameIdentifier).Value , Email = userForUpdate.Email, Name= userForUpdate.Name};
             if (await Repo.Update(user))
             {
                 return Ok();
