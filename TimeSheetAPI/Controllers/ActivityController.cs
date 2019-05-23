@@ -44,13 +44,18 @@ namespace TimeSheetAPI.Controllers
             {
                 return BadRequest();
             }
-            Models.Activity activity = new Models.Activity();
+            Models.Activity activity = new Models.Activity { Id = id};
             activity = await Repo.Get(activity);
             if (activity == null)
             {
                 return NotFound();
             }
-            return Ok(activity);
+            Dto.Activity activityDto = new Dto.Activity { Id= activity.Id, ProjectId = activity.ProjectId, Name= activity.Name };
+            if (activityDto == null)
+            {
+                return NotFound();
+            }
+            return Ok(activityDto);
         }
         [HttpPost("Create")]
         public async Task<IActionResult> PutActivity([FromBody]Dto.ActivityForCreate activity)
