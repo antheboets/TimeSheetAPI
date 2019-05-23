@@ -16,98 +16,107 @@ namespace TimeSheetAPI.Controllers
     [ApiController]
     public class ActivityController : ControllerBase
     {
-        private readonly TimeSheetContext Repo;
-
-        public ActivityController(TimeSheetContext Repo)
+        private readonly IActivityRepository Repo;
+        public ActivityController(IActivityRepository Repo)
         {
             this.Repo = Repo;
         }
-
-        // GET: api/Activities
         [AllowAnonymous]
         [HttpGet("Test")]
-        public async Task<ActionResult<IEnumerable<Activity>>> GetActivity()
+        public async Task<ActionResult<IEnumerable<Dto.Activity>>> Test()
         {
-            return await Repo.Activity.ToListAsync();
-        }
-
-        // GET: api/Activities/5
-        [HttpGet("Get")]
-        public async Task<ActionResult<Activity>> GetActivity(string id)
-        {
-            var activity = await Repo.Activity.FindAsync(id);
-
-            if (activity == null)
+            List<Models.Activity> activities = await Repo.GetAll();
+            List<Dto.Activity> activitiesDto = new List<Dto.Activity>();
+            foreach (Models.Activity activity in activities) 
             {
-                return NotFound();
+                activitiesDto.Add(new Dto.Activity { Id = activity.Id, Name= activity.Name, ProjectId= activity.ProjectId });
             }
-
-            return activity;
+            return Ok(activitiesDto);
         }
-
-        // PUT: api/Activities/5
-        [HttpPost("Create")]
-        public async Task<IActionResult> PutActivity(string id, Activity activity)
+        [HttpGet("Get")]
+        public async Task<ActionResult<Dto.Activity>> GetActivity([FromQuery]string id)
         {
-            if (id != activity.Id)
+            if (id == null)
             {
                 return BadRequest();
             }
-
-            Repo.Entry(activity).State = EntityState.Modified;
-
-            try
+            if (id == "")
             {
-                await Repo.SaveChangesAsync();
+                return BadRequest();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ActivityExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Activities
-        [HttpPost("Update")]
-        public async Task<ActionResult<Activity>> PostActivity(Activity activity)
-        {
-            Repo.Activity.Add(activity);
-            await Repo.SaveChangesAsync();
-
-            return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
-        }
-        [HttpGet]
-        public ActionResult Test2()
-        {
-            return Ok();
-        }
-        // DELETE: api/Activities/5
-        [HttpPost("Delete")]
-        public async Task<ActionResult<Activity>> Delete([FromBody] Dto.ActivityForDelete activityForDelete)
-        {
-            var activity = await Repo.Activity.FindAsync(activityForDelete.Id);
+            Models.Activity activity = new Models.Activity();
+            activity = await Repo.Get(activity);
             if (activity == null)
             {
                 return NotFound();
             }
-
-            Repo.Activity.Remove(activity);
-            await Repo.SaveChangesAsync();
-
-            return activity;
+            return Ok(activity);
         }
-
-        private bool ActivityExists(string id)
+        [HttpPost("Create")]
+        public async Task<IActionResult> PutActivity([FromBody]Dto.ActivityForCreate activity)
         {
-            return Repo.Activity.Any(e => e.Id == id);
+            if (activity == null)
+            {
+                return BadRequest();
+            }
+            if (activity.ProjectId == null)
+            {
+                return BadRequest();
+            }
+            if (activity.ProjectId == "")
+            {
+                return BadRequest();
+            }
+            Models.Activity activityModel = new Models.Activity {Name=activity.Name, ProjectId=activity.ProjectId};
+            if (await Repo.Create(activityModel))
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+        [HttpPost("Update")]
+        public async Task<ActionResult> PostActivity([FromBody]Dto.ActivityForUpdate activity)
+        {
+            if (activity == null)
+            {
+                return BadRequest();
+            }
+            if (activity.Id == null)
+            {
+                return BadRequest();
+            }
+            if (activity.Id == "")
+            {
+                return BadRequest();
+            }
+            Models.Activity activityModel = new Models.Activity {Id = activity.Id, Name = activity.Name};
+            if (await Repo.Update(activityModel))
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+        [HttpPost("Delete")]
+        public async Task<ActionResult> Delete([FromBody] Dto.ActivityForDelete activity)
+        {
+            if (activity == null)
+            {
+                return BadRequest();
+            }
+            if (activity.Id == null)
+            {
+                return BadRequest();
+            }
+            if (activity.Id == "")
+            {
+                return BadRequest();
+            }
+            Models.Activity activityModel = new Models.Activity { Id = activity.Id};
+            if (await Repo.Delete(activityModel))
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }
