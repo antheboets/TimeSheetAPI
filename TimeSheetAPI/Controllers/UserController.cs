@@ -56,14 +56,14 @@ namespace TimeSheetAPI.Controllers
             {
                 return BadRequest();
             }
-            
+
             if (workmMonth != null)
             {
                 workMonthDto = new Dto.WorkMonth { Id = workmMonth.Id, Accepted = workmMonth.Accepted, Month = workmMonth.Month, UserId = workmMonth.UserId };
                 workMonthDto.Salary = Repo.GetSalary(userModel);
                 workMonthDto.TotalHours = Repo.GetTotalTime(userModel);
             }
-            Dto.UserForGetHR userForGet = new Dto.UserForGetHR { Id= userModel.Id , Name= userModel.Name, ChangeHistory= userModel.ChangeHistory, Email= userModel.Email, DefaultWorkweekId= userModel.DefaultWorkweekId, RoleId= userModel.RoleId, ExceptionWorkDayIds= ExceptionDaysIds, LogIds=LogsIds , WorkMonth = workMonthDto };
+            Dto.UserForGetHR userForGet = new Dto.UserForGetHR { Id = userModel.Id, Name = userModel.Name, ChangeHistory = userModel.ChangeHistory, Email = userModel.Email, DefaultWorkweekId = userModel.DefaultWorkweekId, RoleId = userModel.RoleId, ExceptionWorkDayIds = ExceptionDaysIds, LogIds = LogsIds, WorkMonth = workMonthDto };
             //Mapper.Map<Dto.UserForGet>(userModel.Result);
             if (userForGet == null)
             {
@@ -107,7 +107,7 @@ namespace TimeSheetAPI.Controllers
         [HttpGet("test")]
         public async Task<ActionResult<List<Dto.UserForGetFull>>> Test()
         {
-            return Ok(Mapper.Map<List<Dto.UserForGetFull>> (await Repo.GetAll()));
+            return Ok(Mapper.Map<List<Dto.UserForGetFull>>(await Repo.GetAll()));
         }
         //HR
         [HttpGet("GetConsultants")]
@@ -143,7 +143,7 @@ namespace TimeSheetAPI.Controllers
                     workMonth.Salary = Repo.GetSalary(user);
                     workMonth.TotalHours = Repo.GetTotalTime(user);
                     userForGetHR.WorkMonth = workMonth;
-                    
+
                 }
                 catch (Exception e)
                 {
@@ -156,7 +156,6 @@ namespace TimeSheetAPI.Controllers
         [HttpPost("UpdateWorkMonth")]
         public async Task<ActionResult> UpdateUser(Dto.WorkMontForUpdate workMonth)
         {
-            
             if (workMonth == null)
             {
                 return BadRequest();
@@ -164,6 +163,18 @@ namespace TimeSheetAPI.Controllers
             Models.WorkMonth workMonthModel = new Models.WorkMonth { Id = workMonth.Id, Accepted = workMonth.Accepted, Month = workMonth.Month, UserId = workMonth.UserId };
             if (await Repo.UpdateWorkMonth(workMonthModel))
             {
+                if (!workMonth.Accepted)
+                {
+                    Models.User user = await Repo.GetUserFromWorkMonth(workMonthModel);
+                    if (user == null)
+                    {
+                        return BadRequest();
+                    }
+                    if (Repo.SendMail(workMonth.Body, user))
+                    {
+                        return Ok();
+                    }
+                }
                 return Ok();
             }
             return BadRequest();
@@ -216,11 +227,11 @@ namespace TimeSheetAPI.Controllers
             {
                 return Unauthorized();
             }
-            List<string> Emails =  await Repo.GetAllMails();
+            List<string> Emails = await Repo.GetAllMails();
             List<Dto.UserForEmail> userForEmails = new List<Dto.UserForEmail>();
             foreach (string email in Emails)
             {
-                userForEmails.Add(new UserForEmail {Email=email });
+                userForEmails.Add(new UserForEmail { Email = email });
             }
             return Ok(userForEmails);
         }
