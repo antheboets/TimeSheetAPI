@@ -55,6 +55,11 @@ namespace TimeSheetAPI.Controllers
         public async Task<ActionResult> Update([FromBody]Dto.LogForUpdate log)
         {
             Models.Log ModelLog = new Models.Log { Id=log.Id, Start = log.Start, Stop = log.Stop, Description = log.Description, UserId = log.UserId ,ActivityId = log.ActivityId };
+            Models.User user = new Models.User { Id = User.FindFirst(ClaimTypes.NameIdentifier).Value };
+            if (await Repo.IsAllowed(user, ModelLog))
+            {
+                BadRequest();
+            }
             if (await Repo.Update(ModelLog))
             {
                 return Ok();
