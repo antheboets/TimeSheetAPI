@@ -276,5 +276,35 @@ namespace TimeSheetAPI.Infrastructure
             }
             return emails;
         }
+        public async Task<Models.WorkMonth> GetWorkMonths(Models.User user, DateTime Time)
+        {
+            if (user == null)
+            {
+                return null;
+            }
+            if (user.Id == null)
+            {
+                return null;
+            }
+            if (user.Id == "")
+            {
+                return null;
+            }
+            int currentMonth = (Time.Year * 12) + Time.Month;
+            Models.WorkMonth workMonth = null;
+            try
+            {
+                workMonth = await TimeSheetContext.WorkMonth.Where(x => x.UserId == user.Id && x.Month == currentMonth).SingleOrDefaultAsync();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            if (workMonth == null)
+            {
+                return null;
+            }
+            return workMonth;
+        }
     }
 }

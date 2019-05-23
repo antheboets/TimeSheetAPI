@@ -15,6 +15,6 @@ namespace TimeSheetAPI.Dto
         public ICollection<string> ExceptionWorkDayIds { get; set; }
         public ICollection<string> LogIds { get; set; }
         public bool ChangeHistory { get; set; }
-
+        public DateTime Month { get; set; }
     }
 }

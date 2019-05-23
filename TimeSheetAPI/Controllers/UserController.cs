@@ -29,11 +29,15 @@ namespace TimeSheetAPI.Controllers
             this.Mapper = Mapper;
         }
         [HttpPost("Get")]
-        public async Task<Dto.UserForGet> Get([FromBody] Dto.UserForGet UserId)
+        public async Task<Dto.UserForGetHR> Get([FromBody] Dto.UserForGet UserId)
         {
             if (UserId.Id == "")
             {
                 return null;
+            }
+            if (UserId.Month == DateTime.MinValue)
+            {
+                UserId.Month = DateTime.Now;
             }
             Models.User user = new Models.User { Id = UserId.Id };
             /*  
@@ -45,11 +49,19 @@ namespace TimeSheetAPI.Controllers
             var userModel = await Repo.Get(user);
             var ExceptionDaysIds = await Repo.GetListOfExceptionDays(user);
             var LogsIds = await Repo.GetListOfLogs(user);
+            var workmMonth = await Repo.GetWorkMonths(userModel, UserId.Month);
             if (userModel == null)
             {
                 return null;
             }
-            Dto.UserForGet userForGet = new Dto.UserForGet { Id= userModel.Id , Name= userModel.Name, ChangeHistory= userModel.ChangeHistory, Email= userModel.Email, DefaultWorkweekId= userModel.DefaultWorkweekId, RoleId= userModel.RoleId, ExceptionWorkDayIds= ExceptionDaysIds, LogIds=LogsIds};
+            Dto.WorkMonth workMonthDto = null;
+            if (workmMonth != null)
+            {
+                workMonthDto = new Dto.WorkMonth { Id = workmMonth.Id, Accepted = workmMonth.Accepted, Month = workmMonth.Month, UserId = workmMonth.UserId };
+                workMonthDto.Salary = Repo.GetSalary(userModel);
+                workMonthDto.TotalHours = Repo.GetTotalTime(userModel);
+            }
+            Dto.UserForGetHR userForGet = new Dto.UserForGetHR { Id= userModel.Id , Name= userModel.Name, ChangeHistory= userModel.ChangeHistory, Email= userModel.Email, DefaultWorkweekId= userModel.DefaultWorkweekId, RoleId= userModel.RoleId, ExceptionWorkDayIds= ExceptionDaysIds, LogIds=LogsIds , WorkMonth = workMonthDto };
             //Mapper.Map<Dto.UserForGet>(userModel.Result);
             if (userForGet == null)
             {

@@ -19,6 +19,7 @@ namespace TimeSheetAPI.Infrastructure
         string GetTotalTime(Models.User user);
         string GetSalary(Models.User user);
         Task<List<Models.WorkMonth>> GetAllWorkMonths();
+        Task<Models.WorkMonth> GetWorkMonths(Models.User user, DateTime Time);
         Task<Models.DefaultWorkweek> GetDefaultWorkweek(Models.DefaultWorkweek defaultWorkweek);
         Task<bool> UpdateDefaultWorkWeek(Models.DefaultWorkweek defaultWorkweek);
         Task<List<string>> GetAllMails();
