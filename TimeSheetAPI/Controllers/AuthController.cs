@@ -35,7 +35,24 @@ namespace TimeSheetAPI.Controllers
             {
                 return BadRequest("Username already exists");
             }
-            Models.User userToCreate = new Models.User { Email = user.Email.ToLower()};
+            string roleId = "";
+            if (Config.GetSection("Role:Consultant:Name").Value == user.Role)
+            {
+                roleId = Config.GetSection("Role:Consultant:Id").Value;
+            }
+            if (Config.GetSection("Role:Manager:Name").Value == user.Role)
+            {
+                roleId = Config.GetSection("Role:Consultant:Id").Value;
+            }
+            if (Config.GetSection("Role:Human-Resources:Name").Value == user.Role)
+            {
+                roleId = Config.GetSection("Role:Consultant:Id").Value;
+            }
+            if (roleId == "")
+            {
+                return BadRequest();
+            }
+            Models.User userToCreate = new Models.User { Email = user.Email.ToLower(), HourlyRate = user.Sal, RoleId = roleId };
 
             var createdUser = await Repo.Register(userToCreate, user.Password);
 
@@ -75,23 +92,16 @@ namespace TimeSheetAPI.Controllers
         public async Task<ActionResult<Dto.Success>> ChangePassword([FromBody] Dto.AuthNewPass authNewPass)
         {
             Dto.UserId userId = new UserId { Id = User.FindFirst(ClaimTypes.NameIdentifier).Value };
-            
+
             if (authNewPass == null)
             {
-                return BadRequest( new Success { SuccessState = false });
+                return BadRequest(new Success { SuccessState = false });
             }
             if (await Repo.ChangePassword(userId, authNewPass.NewPassword))
             {
-                return Ok( new Success { SuccessState = true });
+                return Ok(new Success { SuccessState = true });
             }
             return Ok(new Success { SuccessState = true });
         }
-        [HttpPost("CSVUser")]
-        public async Task<ActionResult> CsvUser()
-        {
-
-            return Ok();
-        }
     }
-
 }
