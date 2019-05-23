@@ -152,20 +152,28 @@ namespace TimeSheetAPI.Infrastructure
             {
                 return "";
             }
-            int curentMonth = (DateTime.Now.Year * 12) + DateTime.Now.Month;
-            List<Models.Log> logs = user.Logs.Where(x => ((x.Start.Year * 12) + x.Start.Month) == curentMonth && ((x.Stop.Year * 12) + x.Stop.Month) == curentMonth).ToList();
-            int sec = 0;
-            int min = 0;
-            int hour = 0;
-            foreach (Models.Log log in logs)
+            if (user.Logs.Count > 0)
             {
-                sec += log.Stop.Second - log.Start.Second;
-                min += log.Stop.Minute - log.Start.Minute;
-                hour += log.Stop.Hour - log.Start.Hour;
+                int curentMonth = (DateTime.Now.Year * 12) + DateTime.Now.Month;
+
+                List<Models.Log> logs = user.Logs.Where(x => ((x.Start.Year * 12) + x.Start.Month) == curentMonth && ((x.Stop.Year * 12) + x.Stop.Month) == curentMonth).ToList();
+                int sec = 0;
+                int min = 0;
+                int hour = 0;
+                foreach (Models.Log log in logs)
+                {
+                    sec += log.Stop.Second - log.Start.Second;
+                    min += log.Stop.Minute - log.Start.Minute;
+                    hour += log.Stop.Hour - log.Start.Hour;
+                }
+                min += sec / 60;
+                hour += min / 60;
+                return hour + ":" + min + ":" + sec;
             }
-            min += sec / 60;
-            hour += min / 60;
-            return hour + ":" + min + ":" +sec;
+            else
+            {
+                return "00:00:00";
+            }
         }
         public async Task<bool> Update(Models.User user)
         {
@@ -305,6 +313,32 @@ namespace TimeSheetAPI.Infrastructure
                 return null;
             }
             return workMonth;
+        }
+        public async Task<List<Models.Log>> GetLogsOfUserMonth(User user, DateTime Time)
+        {
+            if (user == null)
+            {
+                return null;
+            }
+            if (user.Id == null)
+            {
+                return null;
+            }
+            if (user.Id == "")
+            {
+                return null;
+            }
+            int currentMonth = (Time.Year * 12) + Time.Month;
+            List<Models.Log> logsOfMonth = null;
+            try
+            {
+                logsOfMonth = await TimeSheetContext.Log.Where(x => x.UserId == user.Id && (x.Start.Year * 12) + x.Start.Month == currentMonth && (x.Stop.Year * 12) + x.Stop.Month == currentMonth).ToListAsync();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            return logsOfMonth;
         }
     }
 }

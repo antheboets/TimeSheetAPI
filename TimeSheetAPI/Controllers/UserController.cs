@@ -54,6 +54,7 @@ namespace TimeSheetAPI.Controllers
             {
                 return null;
             }
+            userModel.Logs =  await Repo.GetLogsOfUserMonth(userModel, UserId.Month);
             Dto.WorkMonth workMonthDto = null;
             if (workmMonth != null)
             {
