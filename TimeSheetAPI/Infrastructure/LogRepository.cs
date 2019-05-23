@@ -139,11 +139,31 @@ namespace TimeSheetAPI.Infrastructure
             return await TimeSheetContext.Log.Where(x => x.Start > WeekStart && x.Stop < WeekStop && x.UserId == userId).ToListAsync();
         }
 
-        public Task<WorkMonth> GetWorkMonths(User user, DateTime Time)
+        public async Task<bool> IsAllowed(Models.User user, Models.Log log)
         {
-            throw new NotImplementedException();
+            if (user == null)
+            {
+                return false;
+            }
+            if (log == null)
+            {
+                return false;
+            }
+            int Month = (log.Start.Year * 12) + log.Start.Month;
+            try
+            {
+                Models.WorkMonth workMonth =  await TimeSheetContext.WorkMonth.Where(x => x.Month == Month && x.UserId == user.Id).SingleOrDefaultAsync();
+                if (workMonth == null)
+                {
+                    return false;
+                }
+                return workMonth.Accepted;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
-
         public bool IsCurrentMonth(Models.Log log)
         {
             int currentMonth = (DateTime.Now.Year * 12) + DateTime.Now.Month;

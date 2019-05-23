@@ -46,9 +46,11 @@
     "HourlyRate": "10.00"
   },
   {
+    "Id": "f12ee417-a597-4fc8-9596-73159ecad4e6",
     "Name": "Coalfield",
     "Email": "ehbtimesheettest@gmail.com",
     "RoleId": "5286f545-46df-4ccc-945d-515de9ebe516",
+    "DefaultWorkweekId": "6c461b35-8839-4e2f-a631-512ba4dd152d",
     "ChangeHistory": "False",
     "HourlyRate": "10.00"
   },
