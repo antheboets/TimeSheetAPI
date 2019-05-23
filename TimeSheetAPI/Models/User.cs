@@ -23,5 +23,6 @@ namespace TimeSheetAPI.Models
         public ICollection<Log> Logs { get; set; }
         public List<ProjectUser> Projects { get; set; }
         public bool ChangeHistory { get; set; }
+        public double HourlyRate { get; set; }
     }
 }

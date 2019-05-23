@@ -5,7 +5,9 @@
     "Email": "test@test.com",
     "RoleId": "5286f545-46df-4ccc-945d-515de9ebe516",
     "DefaultWorkweekId": "0b94f947-a598-4ce9-afa6-c2ab6c28d515",
-    "ChangeHistory" : "False"
+    "ChangeHistory": "False",
+    "HourlyRate" : "10.00"
+
   },
   {
     "Id": "ce68bdb9-c5f0-440a-a403-c3a53791590f",
@@ -13,7 +15,8 @@
     "Email": "co@test.com",
     "RoleId": "5286f545-46df-4ccc-945d-515de9ebe516",
     "DefaultWorkweekId": "101f2004-f78d-42ae-ad26-eb61841eed42",
-    "ChangeHistory": "False"
+    "ChangeHistory": "False",
+    "HourlyRate": "10.00"
   },
   {
     "Id": "d97f95f4-fd95-48c8-9f61-26aa70573cff",
@@ -21,7 +24,8 @@
     "Email": "co1@test.com",
     "RoleId": "5286f545-46df-4ccc-945d-515de9ebe516",
     "DefaultWorkweekId": "15aea14d-df8d-4c79-99bb-9f1e6bc54c13",
-    "ChangeHistory": "False"
+    "ChangeHistory": "False",
+    "HourlyRate": "10.00"
   },
   {
     "Id": "e038d94c-a638-49a3-ba05-53351b160726",
@@ -29,7 +33,8 @@
     "Email": "co2@test.com",
     "RoleId": "5286f545-46df-4ccc-945d-515de9ebe516",
     "DefaultWorkweekId": "3795f1b5-a0d9-4c15-be1d-63d3fea321c3",
-    "ChangeHistory": "False"
+    "ChangeHistory": "False",
+    "HourlyRate": "10.00"
   },
   {
     "Id": "fa4cfd6e-0915-4576-8b9d-a0fd8b0402af",
@@ -37,7 +42,15 @@
     "Email": "co3@test.com",
     "RoleId": "5286f545-46df-4ccc-945d-515de9ebe516",
     "DefaultWorkweekId": "6c461b35-8839-4e2f-a631-512ba4dd152d",
-    "ChangeHistory": "False"
+    "ChangeHistory": "False",
+    "HourlyRate": "10.00"
+  },
+  {
+    "Name": "Coalfield",
+    "Email": "ehbtimesheettest@gmail.com",
+    "RoleId": "5286f545-46df-4ccc-945d-515de9ebe516",
+    "ChangeHistory": "False",
+    "HourlyRate": "10.00"
   },
   {
     "Id": "106e0206-4f15-4d19-9eff-2017bf38decf",

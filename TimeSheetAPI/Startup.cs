@@ -67,7 +67,7 @@ namespace TimeSheetAPI
                 app.UseHsts();
             }
             //app.UseHttpsRedirection();
-            //seeder.SeedAll();
+            seeder.SeedAll();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAPIKeyHandler();
             app.UseAuthentication();

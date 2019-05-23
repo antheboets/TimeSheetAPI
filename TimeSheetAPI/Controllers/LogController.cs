@@ -30,6 +30,10 @@ namespace TimeSheetAPI.Controllers
         public async Task<ActionResult> Create([FromBody]Dto.LogForCreate log)
         {
             Models.Log ModelLog = new Models.Log { UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value, Start = log.Start, Stop = log.Stop, Description = log.Description, ProjectId  = log.ProjectId , ActivityId = log.ActivityId};
+            /*if ()
+            {
+                BadRequest();
+            }*/
             if (await Repo.Create(ModelLog))
             {
                 return Ok();

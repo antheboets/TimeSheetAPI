@@ -169,7 +169,18 @@ namespace TimeSheetAPI.Infrastructure
         }
         public async Task<bool> Update(Models.Log log)
         {
-            if (IsValidLog(log))
+            if (log == null)
+            {
+                return false;
+            }
+            try
+            {
+                Models.Log logOld = await TimeSheetContext.Log.Where(x => x.Id == log.Id).SingleOrDefaultAsync();
+                log.ProjectId = logOld.ProjectId;
+                log.UserId = logOld.UserId;
+                log.ActivityId = logOld.ActivityId;
+            }
+            catch (Exception e)
             {
                 return false;
             }
