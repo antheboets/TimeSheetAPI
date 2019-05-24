@@ -367,7 +367,7 @@ namespace TimeSheetAPI.Infrastructure
         }
         public bool SendMail(string body, Models.User user)
         {
-            MailMessage mailMessage = new MailMessage("ehbtimesheetapi@gmail.com", "anthe.boetsaaaaaaaa@gmail.com"/*user.Email*/);
+            MailMessage mailMessage = new MailMessage("ehbtimesheetapi@gmail.com", user.Email/*user.Email*/);
             mailMessage.Subject = "TimeSheet";
             mailMessage.Body = body;
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
